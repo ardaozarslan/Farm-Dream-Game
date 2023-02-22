@@ -7,36 +7,79 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
 	private Rigidbody rb;
-	private PlayerInputActions playerInputActions;
+	List<GameObject> farmFields = new List<GameObject>();
+	GameObject closestFarmField;
 
-	private void Awake()
+	private void OnEnable()
 	{
 		rb = GetComponent<Rigidbody>();
-
-		playerInputActions = new PlayerInputActions();
-		playerInputActions.Player.Enable();
-		playerInputActions.Player.Jump.performed += Jump;
-		// playerInputActions.Player.Movement.performed += Movement;
 	}
 
-	private void FixedUpdate() {
-		Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
-		float speed = 10f;
-		rb.AddForce(new Vector3(inputVector.x, 0f, inputVector.y) * speed, ForceMode.Force);
-	}
-
-	// private void Movement(InputAction.CallbackContext context)
-	// {
-	// 	Debug.Log(context);
-	// 	Vector2 inputVector = context.ReadValue<Vector2>();
-	// 	float speed = 5f;
-	// 	rb.AddForce(new Vector3(inputVector.x, 0f, inputVector.y) * speed, ForceMode.Force);
-	// }
-
-	public void Jump(InputAction.CallbackContext context)
+	void OnTriggerEnter(Collider other)
 	{
-		Debug.Log(context);
-		Debug.Log("Jump!");
-		rb.AddForce(Vector3.up * 5f, ForceMode.Impulse);
+		if (other.CompareTag("FarmField"))
+		{
+			// Debug.Log("Farm entered");
+			if (!farmFields.Contains(other.gameObject))
+			{
+				farmFields.Add(other.gameObject);
+			}
+		}
+	}
+
+	void OnTriggerExit(Collider other)
+	{
+		if (other.CompareTag("FarmField"))
+		{
+			// Debug.Log("Farm exited");
+			if (farmFields.Contains(other.gameObject))
+			{
+				farmFields.Remove(other.gameObject);
+			}
+		}
+	}
+
+	public void TapInteract(InputAction.CallbackContext context)
+	{
+		if (closestFarmField != null)
+		{
+			Debug.Log("Farm - Tap Interact!");
+			// closestFarmField.GetComponent<FarmField>().TapInteract(context);
+		}
+	}
+
+	public void HoldInteract(InputAction.CallbackContext context)
+	{
+		if (closestFarmField != null)
+		{
+			Debug.Log("Farm - Hold Interact!");
+			// closestFarmField.GetComponent<FarmField>().HoldInteract(context);
+		}
+	}
+
+	private void Update()
+	{
+		if (farmFields.Count > 0)
+		{
+			closestFarmField = farmFields[0];
+			foreach (GameObject farmField in farmFields)
+			{
+				if (Vector3.Distance(transform.position, farmField.transform.position) < Vector3.Distance(transform.position, closestFarmField.transform.position))
+				{
+					closestFarmField = farmField;
+				}
+			}
+		}
+		else {
+			closestFarmField = null;
+		}
+		if (Keyboard.current.tKey.wasPressedThisFrame)
+		{
+			InputManager.SwitchActionMap(InputManager.playerInputActions.Player);
+		}
+		if (Keyboard.current.yKey.wasPressedThisFrame)
+		{
+			InputManager.SwitchActionMap(InputManager.playerInputActions.UI);
+		}
 	}
 }
