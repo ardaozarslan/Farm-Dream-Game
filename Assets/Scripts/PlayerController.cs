@@ -9,23 +9,29 @@ public class PlayerController : MonoBehaviour
 	private Rigidbody rb;
 	private Vector2 lastInputVector = Vector2.zero;
 	private Player player;
+	private InputManager inputManager;
 
 	private void OnEnable()
 	{
 		rb = GetComponent<Rigidbody>();
 		player = GetComponent<Player>();
-		// playerInput = GetComponent<PlayerInput>();
+	}
 
-		InputManager.playerInputActions.Player.Jump.performed += Jump;
-		InputManager.playerInputActions.Player.TapInteract.performed += TapInteract;
-		InputManager.playerInputActions.Player.HoldInteract.performed += HoldInteract;
+	private void Start()
+	{
+		inputManager = InputManager.Instance;
+		inputManager.playerInputActions.Player.Jump.performed += Jump;
+		inputManager.playerInputActions.Player.TapInteract.performed += TapInteract;
+		inputManager.playerInputActions.Player.HoldInteract.performed += HoldInteract;
+		inputManager.playerInputActions.Player.Inventory.performed += Inventory;
 	}
 
 	private void OnDisable()
 	{
-		InputManager.playerInputActions.Player.Jump.performed -= Jump;
-		InputManager.playerInputActions.Player.TapInteract.performed -= TapInteract;
-		InputManager.playerInputActions.Player.HoldInteract.performed -= HoldInteract;
+		inputManager.playerInputActions.Player.Jump.performed -= Jump;
+		inputManager.playerInputActions.Player.TapInteract.performed -= TapInteract;
+		inputManager.playerInputActions.Player.HoldInteract.performed -= HoldInteract;
+		inputManager.playerInputActions.Player.Inventory.performed -= Inventory;
 	}
 
 	private void FixedUpdate()
@@ -45,11 +51,17 @@ public class PlayerController : MonoBehaviour
 		player.HoldInteract(context);
 	}
 
+	private void Inventory(InputAction.CallbackContext context)
+	{
+		// Debug.Log("Inventory!");
+		UIManager.Instance.TriggerInventoryPanel();
+	}
+
 
 
 	private void Movement()
 	{
-		Vector2 inputVector = InputManager.playerInputActions.Player.Movement.ReadValue<Vector2>();
+		Vector2 inputVector = inputManager.playerInputActions.Player.Movement.ReadValue<Vector2>();
 		float speed = 10f;
 		float newVelocityX = Mathf.Lerp(rb.velocity.x, inputVector.x * speed, 10f * Time.deltaTime);
 		float newVelocityZ = Mathf.Lerp(rb.velocity.z, inputVector.y * speed, 10f * Time.deltaTime);
@@ -64,7 +76,7 @@ public class PlayerController : MonoBehaviour
 		lastInputVector = inputVector;
 	}
 
-	public void Jump(InputAction.CallbackContext context)
+	private void Jump(InputAction.CallbackContext context)
 	{
 		Debug.Log("Jump!");
 		rb.AddForce(Vector3.up * 5f, ForceMode.Impulse);

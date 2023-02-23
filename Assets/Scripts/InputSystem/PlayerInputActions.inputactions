@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Inventory",
+                    "type": "Button",
+                    "id": "1196d0b9-dfeb-4ebf-a0ee-8f78a1a7ea4e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -152,17 +161,28 @@
                     "action": "HoldInteract",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0ece68ba-629d-41fd-8a8e-00f491e1700d",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "UI",
-            "id": "60e6f676-a26f-4b88-985c-a2c7f94a8c0c",
+            "name": "Inventory",
+            "id": "c572c14a-6efd-4d32-9821-34850dbe1146",
             "actions": [
                 {
-                    "name": "Submit",
+                    "name": "Inventory",
                     "type": "Button",
-                    "id": "ba2b24e8-07a8-4d66-9ea5-40ddc6222b2d",
+                    "id": "2c66edac-1af1-4f93-a8b2-516bc738549d",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -172,12 +192,12 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "86475d4d-7349-4fbd-bbb5-066e01a84266",
-                    "path": "<Keyboard>/space",
+                    "id": "77ef5215-7277-4792-84b7-304c236a3ace",
+                    "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Submit",
+                    "action": "Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

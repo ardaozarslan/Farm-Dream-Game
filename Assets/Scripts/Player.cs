@@ -7,12 +7,23 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
 	private Rigidbody rb;
-	List<GameObject> farmFields = new List<GameObject>();
-	GameObject closestFarmField;
+	private List<GameObject> farmFields = new List<GameObject>();
+	private GameObject closestFarmField;
+	private InputManager inputManager;
+
+	public MainInventory mainInventory;
+	public HotbarInventory hotbarInventory;
 
 	private void OnEnable()
 	{
 		rb = GetComponent<Rigidbody>();
+	}
+
+	private void Start()
+	{
+		inputManager = InputManager.Instance;
+		mainInventory = MainInventory.Instance;
+		hotbarInventory = HotbarInventory.Instance;
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -70,16 +81,9 @@ public class Player : MonoBehaviour
 				}
 			}
 		}
-		else {
+		else
+		{
 			closestFarmField = null;
-		}
-		if (Keyboard.current.tKey.wasPressedThisFrame)
-		{
-			InputManager.SwitchActionMap(InputManager.playerInputActions.Player);
-		}
-		if (Keyboard.current.yKey.wasPressedThisFrame)
-		{
-			InputManager.SwitchActionMap(InputManager.playerInputActions.UI);
 		}
 	}
 }

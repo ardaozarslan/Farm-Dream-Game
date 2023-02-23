@@ -62,6 +62,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""1196d0b9-dfeb-4ebf-a0ee-8f78a1a7ea4e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -174,17 +183,28 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""HoldInteract"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0ece68ba-629d-41fd-8a8e-00f491e1700d"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
         {
-            ""name"": ""UI"",
-            ""id"": ""60e6f676-a26f-4b88-985c-a2c7f94a8c0c"",
+            ""name"": ""Inventory"",
+            ""id"": ""c572c14a-6efd-4d32-9821-34850dbe1146"",
             ""actions"": [
                 {
-                    ""name"": ""Submit"",
+                    ""name"": ""Inventory"",
                     ""type"": ""Button"",
-                    ""id"": ""ba2b24e8-07a8-4d66-9ea5-40ddc6222b2d"",
+                    ""id"": ""2c66edac-1af1-4f93-a8b2-516bc738549d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -194,12 +214,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""86475d4d-7349-4fbd-bbb5-066e01a84266"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""id"": ""77ef5215-7277-4792-84b7-304c236a3ace"",
+                    ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Submit"",
+                    ""action"": ""Inventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -237,9 +257,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_TapInteract = m_Player.FindAction("TapInteract", throwIfNotFound: true);
         m_Player_HoldInteract = m_Player.FindAction("HoldInteract", throwIfNotFound: true);
-        // UI
-        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-        m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
+        m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
+        // Inventory
+        m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
+        m_Inventory_Inventory = m_Inventory.FindAction("Inventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -303,6 +324,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_TapInteract;
     private readonly InputAction m_Player_HoldInteract;
+    private readonly InputAction m_Player_Inventory;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -311,6 +333,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @TapInteract => m_Wrapper.m_Player_TapInteract;
         public InputAction @HoldInteract => m_Wrapper.m_Player_HoldInteract;
+        public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -332,6 +355,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @HoldInteract.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHoldInteract;
                 @HoldInteract.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHoldInteract;
                 @HoldInteract.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHoldInteract;
+                @Inventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
+                @Inventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
+                @Inventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -348,43 +374,46 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @HoldInteract.started += instance.OnHoldInteract;
                 @HoldInteract.performed += instance.OnHoldInteract;
                 @HoldInteract.canceled += instance.OnHoldInteract;
+                @Inventory.started += instance.OnInventory;
+                @Inventory.performed += instance.OnInventory;
+                @Inventory.canceled += instance.OnInventory;
             }
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
 
-    // UI
-    private readonly InputActionMap m_UI;
-    private IUIActions m_UIActionsCallbackInterface;
-    private readonly InputAction m_UI_Submit;
-    public struct UIActions
+    // Inventory
+    private readonly InputActionMap m_Inventory;
+    private IInventoryActions m_InventoryActionsCallbackInterface;
+    private readonly InputAction m_Inventory_Inventory;
+    public struct InventoryActions
     {
         private @PlayerInputActions m_Wrapper;
-        public UIActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Submit => m_Wrapper.m_UI_Submit;
-        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public InventoryActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Inventory => m_Wrapper.m_Inventory_Inventory;
+        public InputActionMap Get() { return m_Wrapper.m_Inventory; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
-        public void SetCallbacks(IUIActions instance)
+        public static implicit operator InputActionMap(InventoryActions set) { return set.Get(); }
+        public void SetCallbacks(IInventoryActions instance)
         {
-            if (m_Wrapper.m_UIActionsCallbackInterface != null)
+            if (m_Wrapper.m_InventoryActionsCallbackInterface != null)
             {
-                @Submit.started -= m_Wrapper.m_UIActionsCallbackInterface.OnSubmit;
-                @Submit.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnSubmit;
-                @Submit.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnSubmit;
+                @Inventory.started -= m_Wrapper.m_InventoryActionsCallbackInterface.OnInventory;
+                @Inventory.performed -= m_Wrapper.m_InventoryActionsCallbackInterface.OnInventory;
+                @Inventory.canceled -= m_Wrapper.m_InventoryActionsCallbackInterface.OnInventory;
             }
-            m_Wrapper.m_UIActionsCallbackInterface = instance;
+            m_Wrapper.m_InventoryActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Submit.started += instance.OnSubmit;
-                @Submit.performed += instance.OnSubmit;
-                @Submit.canceled += instance.OnSubmit;
+                @Inventory.started += instance.OnInventory;
+                @Inventory.performed += instance.OnInventory;
+                @Inventory.canceled += instance.OnInventory;
             }
         }
     }
-    public UIActions @UI => new UIActions(this);
+    public InventoryActions @Inventory => new InventoryActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -409,9 +438,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnTapInteract(InputAction.CallbackContext context);
         void OnHoldInteract(InputAction.CallbackContext context);
+        void OnInventory(InputAction.CallbackContext context);
     }
-    public interface IUIActions
+    public interface IInventoryActions
     {
-        void OnSubmit(InputAction.CallbackContext context);
+        void OnInventory(InputAction.CallbackContext context);
     }
 }

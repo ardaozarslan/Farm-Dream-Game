@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour
+public class InputManager : Singleton<InputManager>
 {
-	public static PlayerInputActions playerInputActions;
-	public static event Action<InputActionMap> actionMapChange;
+	public PlayerInputActions playerInputActions;
+	public event Action<InputActionMap> actionMapChange;
+	public ManagersManager managersManager;
 
 	private void Awake() {
 		playerInputActions = new PlayerInputActions();
@@ -15,10 +16,11 @@ public class InputManager : MonoBehaviour
 
 	private void Start()
 	{
+		managersManager = ManagersManager.Instance;
 		SwitchActionMap(playerInputActions.Player);
 	}
 
-	public static void SwitchActionMap(InputActionMap actionMap)
+	public void SwitchActionMap(InputActionMap actionMap)
 	{
 		if (actionMap.enabled)
 		{
