@@ -36,10 +36,15 @@ public class InventoryController : MonoBehaviour
 		UIManager.Instance.TriggerInventoryPanel();
 	}
 
-	private void Update() {
-		if (Keyboard.current.oKey.wasPressedThisFrame) {
-			// Debug.Log("O key was pressed");
+	private void Update()
+	{
+		if (Keyboard.current.oKey.wasPressedThisFrame)
+		{
 			inventoryManager.AddItem(new Item(itemManager.GetItemData("Wheat"), 10));
+		}
+		if (Keyboard.current.pKey.wasPressedThisFrame)
+		{
+			inventoryManager.AddItem(new Item(itemManager.GetItemData("Strawberry"), 15));
 		}
 	}
 }

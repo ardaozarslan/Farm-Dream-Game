@@ -51,6 +51,7 @@ public class InventoryItem : MonoBehaviour
 		item.stackSize = amount;
 		if (item.stackSize <= 0)
 		{
+			// TODO: Destroy this object
 			item.stackSize = 0;
 			item = null;
 		}
@@ -68,6 +69,11 @@ public class InventoryItem : MonoBehaviour
 	{
 		itemImage.sprite = item.sprite;
 		itemImage.color = Color.white;
+		if (item.isStackable) {
+			itemStackSizeText.enabled = true;
+		} else {
+			itemStackSizeText.enabled = false;
+		}
 		itemStackSizeText.text = item.stackSize.ToString();
 	}
 

@@ -11,11 +11,14 @@ public class Item
     public Sprite sprite;
     public int stackSize;
 	public int maxStackSize;
+	public bool isStackable;
+	private ItemData itemData;
+	public ItemData ItemData { get { return itemData; } }
 
 	public enum ItemType {
-		Seed = 100,
+		Tool = 100,
 		Crop = 200,
-		Tool = 300,
+		Seed = 300,
 		Consumable = 400,
 		Other = 500
 	}
@@ -29,6 +32,8 @@ public class Item
         this.sprite = itemData.sprite;
         this.stackSize = stackSize;
 		this.maxStackSize = itemData.maxStackSize;
+		this.isStackable = itemData.isStackable;
+		this.itemData = itemData;
     }
 
 	public Item(Item item, int stackSize = 1) 
@@ -40,5 +45,7 @@ public class Item
 		this.sprite = item.sprite;
 		this.stackSize = stackSize;
 		this.maxStackSize = item.maxStackSize;
+		this.isStackable = item.isStackable;
+		this.itemData = item.itemData;
 	}
 }

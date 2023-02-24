@@ -78,6 +78,38 @@ public class MainInventory : Singleton<MainInventory>
 		return false;
 	}
 
+	public void SortInventoryCells()
+	{
+		List<Transform> children = new List<Transform>();
+		for (int i = gameObject.transform.childCount - 1; i >= 0; i--)
+		{
+			Transform child = gameObject.transform.GetChild(i);
+			children.Add(child);
+			child.SetParent(null, false);
+		}
+		children.Sort((Transform t1, Transform t2) =>
+		{
+			InventoryCell ic1 = t1.GetComponent<InventoryCell>();
+			InventoryCell ic2 = t2.GetComponent<InventoryCell>();
+
+			InventoryItem i1 = ic1.InventoryItem;
+			InventoryItem i2 = ic2.InventoryItem;
+
+			if (i1 == null && i2 != null) return 1;
+			if (i2 == null && i1 != null) return -1;
+			if (i1 == null && i2 == null) return 0;
+
+			int result = i1.Item.itemType.CompareTo(i2.Item.itemType);
+			result = result == 0 ? i1.Item.id.CompareTo(i2.Item.id) : result;
+			result = result == 0 ? i1.Item.stackSize.CompareTo(i2.Item.stackSize) * -1 : result;
+			return result;
+		});
+		foreach (Transform child in children)
+		{
+			child.SetParent(gameObject.transform, false);
+		}
+	}
+
 	// public void RemoveItem(InventoryCell inventoryCell)
 	// {
 	// 	inventoryCell.UpdateStackSize(0);
