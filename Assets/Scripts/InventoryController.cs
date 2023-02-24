@@ -9,6 +9,7 @@ public class InventoryController : MonoBehaviour
 	private Player player;
 	private InputManager inputManager;
 	private ItemManager itemManager;
+	private InventoryManager inventoryManager;
 
 	private void OnEnable()
 	{
@@ -19,6 +20,7 @@ public class InventoryController : MonoBehaviour
 	{
 		inputManager = InputManager.Instance;
 		itemManager = ItemManager.Instance;
+		inventoryManager = InventoryManager.Instance;
 		inputManager.playerInputActions.Inventory.Inventory.performed += Inventory;
 	}
 
@@ -37,7 +39,7 @@ public class InventoryController : MonoBehaviour
 	private void Update() {
 		if (Keyboard.current.oKey.wasPressedThisFrame) {
 			// Debug.Log("O key was pressed");
-			player.mainInventory.AddItem(new Item(itemManager.GetItemData("Wheat"), 10));
+			inventoryManager.AddItem(new Item(itemManager.GetItemData("Wheat"), 10));
 		}
 	}
 }

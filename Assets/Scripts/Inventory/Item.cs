@@ -13,10 +13,11 @@ public class Item
 	public int maxStackSize;
 
 	public enum ItemType {
-		Seed,
-		Tool,
-		Consumable,
-		Other
+		Seed = 100,
+		Crop = 200,
+		Tool = 300,
+		Consumable = 400,
+		Other = 500
 	}
 
     public Item(ItemData itemData, int stackSize = 1) 
@@ -29,4 +30,15 @@ public class Item
         this.stackSize = stackSize;
 		this.maxStackSize = itemData.maxStackSize;
     }
+
+	public Item(Item item, int stackSize = 1) 
+	{
+		this.name = item.name;
+		this.id = item.id;
+		this.itemType = item.itemType;
+		this.description = item.description;
+		this.sprite = item.sprite;
+		this.stackSize = stackSize;
+		this.maxStackSize = item.maxStackSize;
+	}
 }

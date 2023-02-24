@@ -17,14 +17,29 @@ public class UIManager : Singleton<UIManager>
 
 	public void TriggerInventoryPanel()
 	{
-		UIManager.Instance.inventoryPanel.SetActive(!UIManager.Instance.inventoryPanel.activeSelf);
-		if (UIManager.Instance.inventoryPanel.activeSelf)
+		CanvasGroup canvasGroup = inventoryPanel.GetComponent<CanvasGroup>();
+		if (canvasGroup.alpha == 0)
 		{
+			canvasGroup.alpha = 1;
+			canvasGroup.interactable = true;
+			canvasGroup.blocksRaycasts = true;
 			inputManager.SwitchActionMap(inputManager.playerInputActions.Inventory);
 		}
 		else
 		{
+			canvasGroup.alpha = 0;
+			canvasGroup.interactable = false;
+			canvasGroup.blocksRaycasts = false;
 			inputManager.SwitchActionMap(inputManager.playerInputActions.Player);
 		}
+		// inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+		// if (inventoryPanel.activeSelf)
+		// {
+		// 	inputManager.SwitchActionMap(inputManager.playerInputActions.Inventory);
+		// }
+		// else
+		// {
+		// 	inputManager.SwitchActionMap(inputManager.playerInputActions.Player);
+		// }
 	}
 }

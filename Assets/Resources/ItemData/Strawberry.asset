@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Strawberry
   id: 1
-  itemType: 3
+  itemType: 200
   description: Cropped strawberry
   sprite: {fileID: 21300000, guid: a323f7c35eb597041abdaa6da38c1adb, type: 3}
   maxStackSize: 64

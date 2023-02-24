@@ -10,17 +10,19 @@ public class HotbarInventory : Singleton<HotbarInventory>
 	public List<InventoryCell> inventoryCells;
 	public MainInventory mainInventory;
 
-	public event Action<InventoryCell> onItemAdded;
-	public event Action<InventoryCell> onItemRemoved;
-
-	private void Start()
+	private void Awake()
 	{
 		inventoryManager = InventoryManager.Instance;
+	}
+	private void Start()
+	{
+
 		inventoryCells = inventoryManager.hotbarInventoryCells;
 		for (int i = 0; i < inventoryCells.Count; i++)
 		{
 			InventoryCell inventoryCell = inventoryCells[i];
 			inventoryCell.Index = i;
+			inventoryCell.CellType = InventoryCell.cellType.HotbarInventory;
 			inventoryCell.UpdateSelf();
 		}
 
@@ -34,13 +36,13 @@ public class HotbarInventory : Singleton<HotbarInventory>
 		for (int index = 0; index < inventoryCells.Count; index++)
 		{
 			InventoryCell inventoryCell = inventoryCells[index];
-			if (inventoryCell.item != null && inventoryCell.item.id == item.id && inventoryCell.StackSize < item.maxStackSize)
+			if (inventoryCell.InventoryItem != null && inventoryCell.InventoryItem.Item.id == item.id && inventoryCell.InventoryItem.Item.stackSize < item.maxStackSize)
 			{
-				int space = item.maxStackSize - inventoryCell.StackSize;
+				// Debug.Log("Found existing stack for item: " + item.name + " at index: " + index);
+				int space = item.maxStackSize - inventoryCell.InventoryItem.Item.stackSize;
 				int addCount = Mathf.Min(count, space);
-				inventoryCell.StackSize += addCount;
+				inventoryCell.InventoryItem.UpdateStackSize(inventoryCell.InventoryItem.Item.stackSize + addCount);
 				count -= addCount;
-				onItemAdded?.Invoke(inventoryCell);
 				if (count == 0)
 				{
 					return true;
@@ -52,12 +54,14 @@ public class HotbarInventory : Singleton<HotbarInventory>
 		for (int index = 0; index < inventoryCells.Count; index++)
 		{
 			InventoryCell inventoryCell = inventoryCells[index];
-			if (inventoryCell.item == null)
+			if (inventoryCell.InventoryItem == null)
 			{
 				int addCount = Mathf.Min(count, item.maxStackSize);
-				inventoryCell.item = item;
-				inventoryCell.StackSize = addCount;
-				onItemAdded?.Invoke(inventoryCell);
+				GameObject inventoryItemObject = Instantiate(inventoryManager.inventoryItemPrefab, inventoryCell.transform);
+				InventoryItem inventoryItem = inventoryItemObject.GetComponent<InventoryItem>();
+				item.stackSize = count;
+				inventoryItem.Item = item;
+				inventoryItem.UpdateSelf();
 				count -= addCount;
 				if (count == 0)
 				{
@@ -65,15 +69,10 @@ public class HotbarInventory : Singleton<HotbarInventory>
 				}
 			}
 		}
+		item.stackSize = count;
+		// hotbarInventory.AddItem(item);
 
 		return false;
-	}
-
-	public void RemoveItem(InventoryCell inventoryCell)
-	{
-		inventoryCell.StackSize = 0;
-		// items[stack.x, stack.y] = stack;
-		onItemRemoved?.Invoke(inventoryCell);
 	}
 
 }
