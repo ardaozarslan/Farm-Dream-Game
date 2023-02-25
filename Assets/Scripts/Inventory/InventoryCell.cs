@@ -8,6 +8,8 @@ using TMPro;
 public class InventoryCell : MonoBehaviour
 {
 	public InventoryManager inventoryManager;
+	[HideInInspector]
+	public GridLayoutGroup gridLayoutGroup;
 
 	private int index;
 	public int Index
@@ -32,6 +34,7 @@ public class InventoryCell : MonoBehaviour
 
 	private void Awake() {
 		inventoryManager = InventoryManager.Instance;
+		gridLayoutGroup = GetComponent<GridLayoutGroup>();
 	}
 
 	public void UpdateSelf()

@@ -29,50 +29,23 @@ public class HotbarInventory : Singleton<HotbarInventory>
 		mainInventory = MainInventory.Instance;
 	}
 
-	public bool AddItem(Item item)
+	public bool CanAssignItem(InventoryItem inventoryItem)
 	{
-		int count = item.stackSize;
-		// Find an existing stack for the item
-		for (int index = 0; index < inventoryCells.Count; index++)
-		{
-			InventoryCell inventoryCell = inventoryCells[index];
-			if (inventoryCell.InventoryItem != null && inventoryCell.InventoryItem.Item.id == item.id && inventoryCell.InventoryItem.Item.stackSize < item.maxStackSize)
-			{
-				// Debug.Log("Found existing stack for item: " + item.name + " at index: " + index);
-				int space = item.maxStackSize - inventoryCell.InventoryItem.Item.stackSize;
-				int addCount = Mathf.Min(count, space);
-				inventoryCell.InventoryItem.UpdateStackSize(inventoryCell.InventoryItem.Item.stackSize + addCount);
-				count -= addCount;
-				if (count == 0)
-				{
-					return true;
-				}
-			}
-		}
+		// TODO: Check if item is already in hotbar and if so, remove the other one
+		// TODO: Check if item has any use case in hotbar, if not, return false
+		return true;
+	}
 
-		// Find an empty slot for the item
-		for (int index = 0; index < inventoryCells.Count; index++)
-		{
-			InventoryCell inventoryCell = inventoryCells[index];
-			if (inventoryCell.InventoryItem == null)
-			{
-				int addCount = Mathf.Min(count, item.maxStackSize);
-				GameObject inventoryItemObject = Instantiate(inventoryManager.inventoryItemPrefab, inventoryCell.transform);
-				InventoryItem inventoryItem = inventoryItemObject.GetComponent<InventoryItem>();
-				item.stackSize = count;
-				inventoryItem.Item = item;
-				inventoryItem.UpdateSelf();
-				count -= addCount;
-				if (count == 0)
-				{
-					return true;
-				}
-			}
-		}
-		item.stackSize = count;
-		// hotbarInventory.AddItem(item);
+	public void AssignItem(InventoryItem inventoryItem, InventoryCell inventoryCell)
+	{
+		inventoryCell.InventoryItem = Instantiate(inventoryManager.inventoryItemPrefab, inventoryCell.transform).GetComponent<InventoryItem>();
+		inventoryCell.InventoryItem.Item = new Item(inventoryItem.Item.ItemData, inventoryManager.GetTotalItemCount(inventoryItem));
+		inventoryCell.InventoryItem.UpdateStackSize(inventoryManager.GetTotalItemCount(inventoryItem));
+		inventoryCell.InventoryItem.InitializeCell(inventoryCell);
+		inventoryCell.InventoryItem.UpdateSelf();
+		inventoryCell.UpdateSelf();
 
-		return false;
+		// TODO: add a link between the hotbar item and the main inventory item so that when the main inventory item count changes, the hotbar item count changes as well
 	}
 
 }

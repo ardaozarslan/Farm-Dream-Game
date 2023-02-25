@@ -91,6 +91,23 @@ public class InventoryManager : Singleton<InventoryManager>
 		Debug.Log(inventoryItemsString);
 	}
 
+	public int GetTotalItemCount(ItemData itemData)
+	{
+		if (inventoryItemCounts.ContainsKey(itemData))
+		{
+			return inventoryItemCounts[itemData];
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	public int GetTotalItemCount(InventoryItem inventoryItem)
+	{
+		return GetTotalItemCount(inventoryItem.Item.ItemData);
+	}
+
 	private void SortMainInventory() {
 		mainInventory.SortInventoryCells();
 	}

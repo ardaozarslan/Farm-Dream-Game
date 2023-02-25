@@ -42,3 +42,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: UI
+    uniqueID: 2126629221
+    locked: 0
+  - name: UI Drag
+    uniqueID: 1297267589
+    locked: 0

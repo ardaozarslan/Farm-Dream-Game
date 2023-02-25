@@ -11,6 +11,13 @@ public class InventoryItem : MonoBehaviour
 	private InventoryManager inventoryManager;
 	private ItemManager itemManager;
 
+	private bool isDraggable = true;
+	public bool IsDraggable
+	{
+		get { return isDraggable; }
+		private set { this.isDraggable = value; }
+	}
+
 	private Item item;
 	public Item Item
 	{
@@ -37,12 +44,26 @@ public class InventoryItem : MonoBehaviour
 
 	}
 
+	public void SetDraggable(bool _isDraggable)
+	{
+		isDraggable = _isDraggable;
+	}
+
 	public void InitializeCell(InventoryCell cell)
 	{
 		inventoryCell = cell;
 		cell.InventoryItem = this;
 		UpdateSelf();
 		inventoryCell.UpdateSelf();
+
+		if (inventoryCell.CellType == InventoryCell.cellType.HotbarInventory)
+		{
+			isDraggable = false;
+		}
+		else if (inventoryCell.CellType == InventoryCell.cellType.MainInventory)
+		{
+			isDraggable = true;
+		}
 	}
 
 
@@ -69,9 +90,12 @@ public class InventoryItem : MonoBehaviour
 	{
 		itemImage.sprite = item.sprite;
 		itemImage.color = Color.white;
-		if (item.isStackable) {
+		if (item.isStackable)
+		{
 			itemStackSizeText.enabled = true;
-		} else {
+		}
+		else
+		{
 			itemStackSizeText.enabled = false;
 		}
 		itemStackSizeText.text = item.stackSize.ToString();

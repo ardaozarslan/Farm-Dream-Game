@@ -221,8 +221,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3811120329622413032}
   - component: {fileID: 7369615404899543704}
-  - component: {fileID: 2201393285937756192}
+  - component: {fileID: 6564998622475390829}
+  - component: {fileID: 4795163080706085690}
   - component: {fileID: 5647854898926085888}
+  - component: {fileID: 6709599513644076898}
   m_Layer: 5
   m_Name: InventoryItem
   m_TagString: Untagged
@@ -259,7 +261,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7655542076689209394}
   m_CullTransparentMesh: 1
---- !u!114 &2201393285937756192
+--- !u!225 &6564998622475390829
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7655542076689209394}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &4795163080706085690
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -272,7 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -301,5 +315,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a5a24ef7eb67f547b9d13175551bd42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemImage: {fileID: 2201393285937756192}
+  itemImage: {fileID: 4795163080706085690}
   itemStackSizeText: {fileID: 838562825476053478}
+--- !u!114 &6709599513644076898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7655542076689209394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 632032da050997f478081fbd8120c154, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainInventory: {fileID: 0}
+  hotbarInventory: {fileID: 0}
