@@ -8,11 +8,13 @@ public class InventoryManager : Singleton<InventoryManager>
 	public ManagersManager managersManager;
 	public MainInventory mainInventory;
 	public HotbarInventory hotbarInventory;
+	public HotbarToolbar hotbarToolbar;
 
 	public GameObject inventoryItemPrefab;
 
 	public List<InventoryCell> mainInventoryCells = new List<InventoryCell>();
 	public List<InventoryCell> hotbarInventoryCells = new List<InventoryCell>();
+	public List<InventoryCell> hotbarToolbarCells = new List<InventoryCell>();
 
 	public Dictionary<ItemData, List<InventoryItem>> inventoryItems = new Dictionary<ItemData, List<InventoryItem>>();
 	public Dictionary<ItemData, int> inventoryItemCounts = new Dictionary<ItemData, int>();
@@ -25,6 +27,9 @@ public class InventoryManager : Singleton<InventoryManager>
 		managersManager = ManagersManager.Instance;
 		mainInventory = MainInventory.Instance;
 		hotbarInventory = HotbarInventory.Instance;
+		hotbarToolbar = HotbarToolbar.Instance;
+
+		CalculateItemCounts();
 	}
 
 	private void OnEnable()
@@ -47,12 +52,14 @@ public class InventoryManager : Singleton<InventoryManager>
 		Debug.Log("InventoryCellChangeReceive");
 		CalculateItemCounts();
 		SortMainInventory();
+		UpdateHotbarInventory();
 
 	}
 
 	private void CalculateItemCounts()
 	{
 		// TODO: Optimize this so it doesn't have to loop through all the cells
+		// TODO: Find a better way to count items with unique id's (like tools: 52:23476283476)
 		inventoryItems = new Dictionary<ItemData, List<InventoryItem>>();
 		for (int i = 0; i < mainInventoryCells.Count; i++)
 		{
@@ -89,6 +96,10 @@ public class InventoryManager : Singleton<InventoryManager>
 			inventoryItemsString += entry.Key.name + ": " + entry.Value + "\n";
 		}
 		Debug.Log(inventoryItemsString);
+	}
+
+	private void UpdateHotbarInventory() {
+		hotbarInventory.UpdateInventory();
 	}
 
 	public int GetTotalItemCount(ItemData itemData)

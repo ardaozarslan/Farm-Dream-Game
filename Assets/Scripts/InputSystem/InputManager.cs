@@ -10,7 +10,42 @@ public class InputManager : Singleton<InputManager>
 	public event Action<InputActionMap> actionMapChange;
 	public ManagersManager managersManager;
 
-	private void Awake() {
+	public InputActionMap currentActionMap;
+
+	public delegate void DeveloperConsoleStateChanged(bool state);
+	public static event DeveloperConsoleStateChanged developerConsoleStateChanged;
+
+	private void OnEnable()
+	{
+		developerConsoleStateChanged += DeveloperConsoleStateChangeReceive;
+	}
+
+	private void OnDisable()
+	{
+		developerConsoleStateChanged -= DeveloperConsoleStateChangeReceive;
+	}
+
+	public static void DeveloperConsoleStateChangeCall(bool state)
+	{
+		developerConsoleStateChanged?.Invoke(state);
+	}
+
+	public void DeveloperConsoleStateChangeReceive(bool state)
+	{
+		if (state)
+		{
+			TemporarilyDisableCurrentActionMap();
+		}
+		else
+		{
+			ReenableCurrentActionMap();
+		}
+
+	}
+
+
+	private void Awake()
+	{
 		playerInputActions = new PlayerInputActions();
 	}
 
@@ -29,5 +64,16 @@ public class InputManager : Singleton<InputManager>
 		playerInputActions.Disable();
 		actionMapChange?.Invoke(actionMap);
 		actionMap.Enable();
+		currentActionMap = actionMap;
+	}
+
+	public void TemporarilyDisableCurrentActionMap()
+	{
+		currentActionMap.Disable();
+	}
+
+	public void ReenableCurrentActionMap()
+	{
+		currentActionMap.Enable();
 	}
 }

@@ -26,13 +26,15 @@ public class InventoryCell : MonoBehaviour
 
 	public enum cellType
 	{
-		HotbarInventory = 100,
-		MainInventory = 200,
-		Other = 300
+		MainInventory = 100,
+		HotbarInventory = 200,
+		HotbarToolbar = 300,
+		Other = 400
 	}
 	public cellType CellType;
 
-	private void Awake() {
+	private void Awake()
+	{
 		inventoryManager = InventoryManager.Instance;
 		gridLayoutGroup = GetComponent<GridLayoutGroup>();
 	}
@@ -40,6 +42,14 @@ public class InventoryCell : MonoBehaviour
 	public void UpdateSelf()
 	{
 
+	}
+
+	public void DestroyItem() {
+		if (inventoryItem != null) {
+			Destroy(inventoryItem.gameObject);
+			inventoryItem = null;
+			UpdateSelf();
+		}
 	}
 
 }

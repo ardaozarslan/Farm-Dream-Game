@@ -9,6 +9,7 @@ public class HotbarInventory : Singleton<HotbarInventory>
 	public InventoryManager inventoryManager;
 	public List<InventoryCell> inventoryCells;
 	public MainInventory mainInventory;
+	public HotbarToolbar hotbarToolbar;
 
 	private void Awake()
 	{
@@ -27,10 +28,30 @@ public class HotbarInventory : Singleton<HotbarInventory>
 		}
 
 		mainInventory = MainInventory.Instance;
+		hotbarToolbar = HotbarToolbar.Instance;
+
+		UpdateInventory();
 	}
 
-	public bool CanAssignItem(InventoryItem inventoryItem)
+	public bool CanAssignItem(InventoryCell inventoryCell, InventoryItem inventoryItem)
 	{
+		for (int i = 0; i < inventoryCells.Count; i++)
+		{
+			InventoryCell currentInventoryCell = inventoryCells[i];
+			if (currentInventoryCell.InventoryItem != null && currentInventoryCell.InventoryItem.Item.id == inventoryItem.Item.id)
+			{
+				currentInventoryCell.DestroyItem();
+				currentInventoryCell.InventoryItem = null;
+				currentInventoryCell.UpdateSelf();
+				break;
+			}
+		}
+		if (inventoryCell.InventoryItem != null)
+		{
+			inventoryCell.DestroyItem();
+			inventoryCell.InventoryItem = null;
+			inventoryCell.UpdateSelf();
+		}
 		// TODO: Check if item is already in hotbar and if so, remove the other one
 		// TODO: Check if item has any use case in hotbar, if not, return false
 		return true;
@@ -43,9 +64,44 @@ public class HotbarInventory : Singleton<HotbarInventory>
 		inventoryCell.InventoryItem.UpdateStackSize(inventoryManager.GetTotalItemCount(inventoryItem));
 		inventoryCell.InventoryItem.InitializeCell(inventoryCell);
 		inventoryCell.InventoryItem.UpdateSelf();
+		// inventoryCell.InventoryItem.GetComponent<CanvasGroup>().blocksRaycasts = false;
 		inventoryCell.UpdateSelf();
 
-		// TODO: add a link between the hotbar item and the main inventory item so that when the main inventory item count changes, the hotbar item count changes as well
+		UpdateInventory();
+	}
+
+	public void UpdateInventory()
+	{
+		for (int i = 0; i < inventoryCells.Count; i++)
+		{
+			InventoryCell inventoryCell = inventoryCells[i];
+			if (inventoryCell.InventoryItem != null)
+			{
+				Debug.Log("there is an item in the hotbar inventory cell: " + i);
+				InventoryItem inventoryItem = inventoryCell.InventoryItem;
+				int count = inventoryManager.GetTotalItemCount(inventoryItem);
+				Debug.Log("count: " + count);
+				if (count == 0)
+				{
+					inventoryCell.DestroyItem();
+					inventoryCell.InventoryItem = null;
+					inventoryCell.UpdateSelf();
+				}
+				else
+				{
+					inventoryItem.UpdateStackSizeWithoutCall(count);
+					inventoryItem.UpdateSelf();
+					inventoryCell.UpdateSelf();
+				}
+			}
+		}
+
+		UpdateHotbarToolbar();
+	}
+
+	public void UpdateHotbarToolbar()
+	{
+		hotbarToolbar.UpdateInventory();
 	}
 
 }

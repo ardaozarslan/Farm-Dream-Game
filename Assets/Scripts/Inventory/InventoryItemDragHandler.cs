@@ -47,20 +47,47 @@ public class InventoryItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragH
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
+		// WARNING: This is so buggy, fix it
 		if (!inventoryItem.IsDraggable) return;
 		canvasGroup.blocksRaycasts = true;
 
 		// Get the target cell
 		GameObject target = eventData.pointerCurrentRaycast.gameObject;
 		InventoryCell targetCell = target.GetComponent<InventoryCell>();
-		if (targetCell != null && targetCell.CellType == InventoryCell.cellType.HotbarInventory && hotbarInventory.CanAssignItem(inventoryItem))
-		{
-			// Update the inventory cells
-			transform.SetParent(lastParent);
-			hotbarInventory.AssignItem(inventoryItem, targetCell);
-			inventoryItem.InventoryCell.gridLayoutGroup.enabled = true;
-			canvasGroup.blocksRaycasts = true;
+		if (targetCell == null) {
+			InventoryItem targetItem = target.GetComponent<InventoryItem>();
+			if (targetItem != null) {
+				targetCell = targetItem.InventoryCell;
+			}
 		}
+		if (targetCell != null)
+		{
+			if (inventoryItem.InventoryCell.CellType == InventoryCell.cellType.HotbarInventory && targetCell.CellType == InventoryCell.cellType.HotbarInventory)
+			{
+				// Update the inventory cells
+				transform.SetParent(targetCell.transform);
+				if (targetCell.InventoryItem != null)
+				{
+					targetCell.InventoryItem.transform.SetParent(inventoryItem.InventoryCell.transform);
+					targetCell.InventoryItem.InitializeCell(inventoryItem.InventoryCell);
+				}
+				// hotbarInventory.AssignItem(inventoryItem, targetCell);
+
+				inventoryItem.InventoryCell.gridLayoutGroup.enabled = true;
+				canvasGroup.blocksRaycasts = true;
+
+				inventoryItem.InitializeCell(targetCell);
+			}
+			else if (inventoryItem.InventoryCell.CellType == InventoryCell.cellType.MainInventory && targetCell.CellType == InventoryCell.cellType.HotbarInventory && hotbarInventory.CanAssignItem(targetCell, inventoryItem))
+			{
+				// Update the inventory cells
+				transform.SetParent(lastParent);
+				hotbarInventory.AssignItem(inventoryItem, targetCell);
+				inventoryItem.InventoryCell.gridLayoutGroup.enabled = true;
+				canvasGroup.blocksRaycasts = true;
+			}
+		}
+
 		else
 		{
 			// Return the item to its original position

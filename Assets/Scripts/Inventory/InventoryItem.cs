@@ -58,14 +58,13 @@ public class InventoryItem : MonoBehaviour
 
 		if (inventoryCell.CellType == InventoryCell.cellType.HotbarInventory)
 		{
-			isDraggable = false;
+			isDraggable = true;
 		}
 		else if (inventoryCell.CellType == InventoryCell.cellType.MainInventory)
 		{
 			isDraggable = true;
 		}
 	}
-
 
 	public void UpdateStackSize(int amount)
 	{
@@ -77,7 +76,6 @@ public class InventoryItem : MonoBehaviour
 			item = null;
 		}
 		UpdateSelf();
-		Debug.Log("stack size: " + item.stackSize);
 		if (inventoryCell != null)
 		{
 			inventoryManager.InventoryCellChangeCall(inventoryCell);
@@ -85,6 +83,17 @@ public class InventoryItem : MonoBehaviour
 		}
 	}
 
+	public void UpdateStackSizeWithoutCall(int amount)
+	{
+		item.stackSize = amount;
+		if (item.stackSize <= 0)
+		{
+			// TODO: Destroy this object
+			item.stackSize = 0;
+			item = null;
+		}
+		UpdateSelf();
+	}
 
 	public void UpdateSelf()
 	{
@@ -99,7 +108,21 @@ public class InventoryItem : MonoBehaviour
 			itemStackSizeText.enabled = false;
 		}
 		itemStackSizeText.text = item.stackSize.ToString();
+		// itemStackSizeText.text = item.id;
 	}
+	
+
+	public static bool IsSameItem(InventoryItem item1, InventoryItem item2)
+	{
+		if (item1.Item.ItemData.id == item2.Item.ItemData.id)
+		{
+			return true;
+		}
+		else
+		{	
+			return false;
+		}
+	} 
 
 
 }

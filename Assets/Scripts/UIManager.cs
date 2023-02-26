@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIManager : Singleton<UIManager>
 {
 	public GameObject inventoryPanel;
+	public GameObject hotbarToolbarPanel;
 	public InputManager inputManager;
 	public ManagersManager managersManager;
 
@@ -17,29 +18,31 @@ public class UIManager : Singleton<UIManager>
 
 	public void TriggerInventoryPanel()
 	{
-		CanvasGroup canvasGroup = inventoryPanel.GetComponent<CanvasGroup>();
-		if (canvasGroup.alpha == 0)
+		CanvasGroup inventoryCanvasGroup = inventoryPanel.GetComponent<CanvasGroup>();
+		CanvasGroup hotbarCanvasGroup = hotbarToolbarPanel.GetComponent<CanvasGroup>();
+		if (inventoryCanvasGroup.alpha == 0)
 		{
-			canvasGroup.alpha = 1;
-			canvasGroup.interactable = true;
-			canvasGroup.blocksRaycasts = true;
+			inventoryCanvasGroup.alpha = 1;
+			inventoryCanvasGroup.interactable = true;
+			inventoryCanvasGroup.blocksRaycasts = true;
+
+			hotbarCanvasGroup.alpha = 0;
+			hotbarCanvasGroup.interactable = false;
+			hotbarCanvasGroup.blocksRaycasts = false;
+
 			inputManager.SwitchActionMap(inputManager.playerInputActions.Inventory);
 		}
 		else
 		{
-			canvasGroup.alpha = 0;
-			canvasGroup.interactable = false;
-			canvasGroup.blocksRaycasts = false;
+			inventoryCanvasGroup.alpha = 0;
+			inventoryCanvasGroup.interactable = false;
+			inventoryCanvasGroup.blocksRaycasts = false;
+
+			hotbarCanvasGroup.alpha = 1;
+			hotbarCanvasGroup.interactable = true;
+			hotbarCanvasGroup.blocksRaycasts = true;
+
 			inputManager.SwitchActionMap(inputManager.playerInputActions.Player);
 		}
-		// inventoryPanel.SetActive(!inventoryPanel.activeSelf);
-		// if (inventoryPanel.activeSelf)
-		// {
-		// 	inputManager.SwitchActionMap(inputManager.playerInputActions.Inventory);
-		// }
-		// else
-		// {
-		// 	inputManager.SwitchActionMap(inputManager.playerInputActions.Player);
-		// }
 	}
 }
