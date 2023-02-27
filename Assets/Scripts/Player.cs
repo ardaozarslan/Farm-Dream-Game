@@ -7,8 +7,9 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
 	private Rigidbody rb;
-	private List<GameObject> farmFields = new List<GameObject>();
-	private GameObject closestFarmField;
+	private List<FarmField> allFarmFields = new List<FarmField>();
+	private List<FarmField> closeFarmFields = new List<FarmField>();
+	private FarmField closestFarmField;
 	private InputManager inputManager;
 
 	public MainInventory mainInventory;
@@ -24,16 +25,19 @@ public class Player : MonoBehaviour
 		inputManager = InputManager.Instance;
 		mainInventory = MainInventory.Instance;
 		hotbarInventory = HotbarInventory.Instance;
+
+		allFarmFields.AddRange(FindObjectsOfType<FarmField>());
 	}
 
 	void OnTriggerEnter(Collider other)
 	{
 		if (other.CompareTag("FarmField"))
 		{
+			FarmField farmField = other.GetComponent<FarmField>();
 			// Debug.Log("Farm entered");
-			if (!farmFields.Contains(other.gameObject))
+			if (!closeFarmFields.Contains(farmField))
 			{
-				farmFields.Add(other.gameObject);
+				closeFarmFields.Add(farmField);
 			}
 		}
 	}
@@ -42,10 +46,11 @@ public class Player : MonoBehaviour
 	{
 		if (other.CompareTag("FarmField"))
 		{
+			FarmField farmField = other.GetComponent<FarmField>();
 			// Debug.Log("Farm exited");
-			if (farmFields.Contains(other.gameObject))
+			if (closeFarmFields.Contains(farmField))
 			{
-				farmFields.Remove(other.gameObject);
+				closeFarmFields.Remove(farmField);
 			}
 		}
 	}
@@ -70,10 +75,10 @@ public class Player : MonoBehaviour
 
 	private void Update()
 	{
-		if (farmFields.Count > 0)
+		if (closeFarmFields.Count > 0)
 		{
-			closestFarmField = farmFields[0];
-			foreach (GameObject farmField in farmFields)
+			closestFarmField = closeFarmFields[0];
+			foreach (FarmField farmField in closeFarmFields)
 			{
 				if (Vector3.Distance(transform.position, farmField.transform.position) < Vector3.Distance(transform.position, closestFarmField.transform.position))
 				{
@@ -84,6 +89,15 @@ public class Player : MonoBehaviour
 		else
 		{
 			closestFarmField = null;
+		}
+
+		foreach (FarmField farmField in allFarmFields)
+		{
+			farmField.ActivateHighlight(false);
+		}
+		if (closestFarmField) {
+
+			closestFarmField.ActivateHighlight(true);
 		}
 	}
 }

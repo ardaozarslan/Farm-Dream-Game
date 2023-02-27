@@ -52,7 +52,6 @@ public class HotbarInventory : Singleton<HotbarInventory>
 			inventoryCell.InventoryItem = null;
 			inventoryCell.UpdateSelf();
 		}
-		// TODO: Check if item is already in hotbar and if so, remove the other one
 		// TODO: Check if item has any use case in hotbar, if not, return false
 		return true;
 	}

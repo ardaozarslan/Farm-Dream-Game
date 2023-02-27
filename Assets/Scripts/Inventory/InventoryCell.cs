@@ -10,6 +10,8 @@ public class InventoryCell : MonoBehaviour
 	public InventoryManager inventoryManager;
 	[HideInInspector]
 	public GridLayoutGroup gridLayoutGroup;
+	[HideInInspector]
+	public Image image;
 
 	private int index;
 	public int Index
@@ -35,6 +37,7 @@ public class InventoryCell : MonoBehaviour
 
 	private void Awake()
 	{
+		image = GetComponent<Image>();
 		inventoryManager = InventoryManager.Instance;
 		gridLayoutGroup = GetComponent<GridLayoutGroup>();
 	}
@@ -44,11 +47,31 @@ public class InventoryCell : MonoBehaviour
 
 	}
 
-	public void DestroyItem() {
-		if (inventoryItem != null) {
+	public void DestroyItem()
+	{
+		if (inventoryItem != null)
+		{
 			Destroy(inventoryItem.gameObject);
 			inventoryItem = null;
 			UpdateSelf();
+		}
+	}
+
+	public void Select(bool isSelected)
+	{
+		if (isSelected)
+		{
+			image.color = Color.HSVToRGB(0f, 0.6f, 1f);
+			var tempColor = image.color;
+			tempColor.a = 1f;
+			image.color = tempColor;
+		}
+		else
+		{
+			image.color = Color.HSVToRGB(0f, 0f, 1f);
+			var tempColor = image.color;
+			tempColor.a = 0.5f;
+			image.color = tempColor;
 		}
 	}
 

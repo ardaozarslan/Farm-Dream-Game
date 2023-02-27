@@ -30,7 +30,7 @@ public class InventoryItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragH
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-		if (!inventoryItem.IsDraggable) return;
+		if (!inventoryItem.IsDraggable || eventData.button != PointerEventData.InputButton.Left) return;
 		lastParent = transform.parent;
 		transform.SetParent(transform.root);
 		transform.SetAsLastSibling();
@@ -41,22 +41,30 @@ public class InventoryItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragH
 
 	public void OnDrag(PointerEventData eventData)
 	{
-		if (!inventoryItem.IsDraggable) return;
+		if (!inventoryItem.IsDraggable || eventData.button != PointerEventData.InputButton.Left) return;
 		rectTransform.position = eventData.position;
 	}
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		// WARNING: This is so buggy, fix it
-		if (!inventoryItem.IsDraggable) return;
+		if (!inventoryItem.IsDraggable || eventData.button != PointerEventData.InputButton.Left) return;
 		canvasGroup.blocksRaycasts = true;
 
 		// Get the target cell
 		GameObject target = eventData.pointerCurrentRaycast.gameObject;
+		if (target == null)
+		{
+			transform.SetParent(lastParent);
+			inventoryItem.InventoryCell.gridLayoutGroup.enabled = true;
+			canvasGroup.blocksRaycasts = true;
+			return;
+		}
 		InventoryCell targetCell = target.GetComponent<InventoryCell>();
-		if (targetCell == null) {
+		if (targetCell == null)
+		{
 			InventoryItem targetItem = target.GetComponent<InventoryItem>();
-			if (targetItem != null) {
+			if (targetItem != null)
+			{
 				targetCell = targetItem.InventoryCell;
 			}
 		}
@@ -68,8 +76,12 @@ public class InventoryItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragH
 				transform.SetParent(targetCell.transform);
 				if (targetCell.InventoryItem != null)
 				{
-					targetCell.InventoryItem.transform.SetParent(inventoryItem.InventoryCell.transform);
+					targetCell.InventoryItem.transform.SetParent(lastParent);
 					targetCell.InventoryItem.InitializeCell(inventoryItem.InventoryCell);
+				}
+				else
+				{
+					inventoryItem.InventoryCell.InventoryItem = null;
 				}
 				// hotbarInventory.AssignItem(inventoryItem, targetCell);
 
@@ -86,8 +98,13 @@ public class InventoryItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragH
 				inventoryItem.InventoryCell.gridLayoutGroup.enabled = true;
 				canvasGroup.blocksRaycasts = true;
 			}
+			else {
+				// Return the item to its original position
+				transform.SetParent(lastParent);
+				inventoryItem.InventoryCell.gridLayoutGroup.enabled = true;
+				canvasGroup.blocksRaycasts = true;
+			}
 		}
-
 		else
 		{
 			// Return the item to its original position

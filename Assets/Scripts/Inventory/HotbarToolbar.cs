@@ -7,8 +7,11 @@ public class HotbarToolbar : Singleton<HotbarToolbar>
 	public InventoryManager inventoryManager;
 	public List<InventoryCell> inventoryCells;
 
+	public int SelectedIndex { get; set; }
+
 	private void Awake()
 	{
+		SelectedIndex = 0;
 		inventoryManager = InventoryManager.Instance;
 	}
 	private void Start()
@@ -22,6 +25,7 @@ public class HotbarToolbar : Singleton<HotbarToolbar>
 			inventoryCell.CellType = InventoryCell.cellType.HotbarToolbar;
 			inventoryCell.UpdateSelf();
 		}
+		UpdateSelection();
 
 	}
 
@@ -62,6 +66,39 @@ public class HotbarToolbar : Singleton<HotbarToolbar>
 				inventoryCell.InventoryItem.InitializeCell(inventoryCell);
 				inventoryCell.InventoryItem.UpdateSelf();
 				inventoryCell.UpdateSelf();
+			}
+		}
+	}
+
+	public void ChangeSelection(int index) {
+		SelectedIndex = index;
+		UpdateSelection();
+	}
+
+	public void ChangeSelection(string name) {
+		switch (name)
+		{
+			case "up":
+				SelectedIndex = (SelectedIndex + 1) % inventoryCells.Count;
+				break;
+			case "down":
+				SelectedIndex = (SelectedIndex - 1 + inventoryCells.Count) % inventoryCells.Count;
+				break;
+			default:
+				break;
+		}
+		UpdateSelection();
+	}
+
+	public void UpdateSelection() {
+		for (int i = 0; i < inventoryCells.Count; i++)
+		{
+			InventoryCell inventoryCell = inventoryCells[i];
+			if (i == SelectedIndex) {
+				inventoryCell.Select(true);
+			}
+			else {
+				inventoryCell.Select(false);
 			}
 		}
 	}

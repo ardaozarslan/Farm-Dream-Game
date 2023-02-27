@@ -24,6 +24,17 @@ public class PlayerController : MonoBehaviour
 		inputManager.playerInputActions.Player.TapInteract.performed += TapInteract;
 		inputManager.playerInputActions.Player.HoldInteract.performed += HoldInteract;
 		inputManager.playerInputActions.Player.Inventory.performed += Inventory;
+
+		inputManager.playerInputActions.Player.HotbarUp.performed += HotbarUp;
+		inputManager.playerInputActions.Player.HotbarDown.performed += HotbarDown;
+		inputManager.playerInputActions.Player.HotbarSelect1.performed += HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect2.performed += HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect3.performed += HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect4.performed += HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect5.performed += HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect6.performed += HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect7.performed += HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect8.performed += HotbarSelect;
 	}
 
 	private void OnDisable()
@@ -32,6 +43,17 @@ public class PlayerController : MonoBehaviour
 		inputManager.playerInputActions.Player.TapInteract.performed -= TapInteract;
 		inputManager.playerInputActions.Player.HoldInteract.performed -= HoldInteract;
 		inputManager.playerInputActions.Player.Inventory.performed -= Inventory;
+
+		inputManager.playerInputActions.Player.HotbarUp.performed -= HotbarUp;
+		inputManager.playerInputActions.Player.HotbarDown.performed -= HotbarDown;
+		inputManager.playerInputActions.Player.HotbarSelect1.performed -= HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect2.performed -= HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect3.performed -= HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect4.performed -= HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect5.performed -= HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect6.performed -= HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect7.performed -= HotbarSelect;
+		inputManager.playerInputActions.Player.HotbarSelect8.performed -= HotbarSelect;
 	}
 
 	private void FixedUpdate()
@@ -55,6 +77,31 @@ public class PlayerController : MonoBehaviour
 	{
 		// Debug.Log("Inventory!");
 		UIManager.Instance.TriggerInventoryPanel();
+	}
+
+	private void HotbarUp(InputAction.CallbackContext context)
+	{
+		// Debug.Log("Hotbar Up!");
+		InventoryManager.Instance.ChangeHotBarSelection("up");
+		// UIManager.Instance.TriggerHotbarPanel();
+	}
+
+	private void HotbarDown(InputAction.CallbackContext context)
+	{
+		// Debug.Log("Hotbar Down!");
+		InventoryManager.Instance.ChangeHotBarSelection("down");
+		// UIManager.Instance.TriggerHotbarPanel();
+	}
+
+	private void HotbarSelect(InputAction.CallbackContext context)
+	{
+		Debug.Log("Hotbar Select! " + context.action.name);
+		string hotbarNumber = context.action.name.Substring(context.action.name.Length - 1);
+		bool isNumber = int.TryParse(hotbarNumber, out int n);
+		if (!isNumber)
+			return;
+		InventoryManager.Instance.ChangeHotBarSelection(n - 1);
+		// UIManager.Instance.TriggerHotbarPanel();
 	}
 
 

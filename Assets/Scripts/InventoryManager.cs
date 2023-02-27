@@ -42,6 +42,16 @@ public class InventoryManager : Singleton<InventoryManager>
 		inventoryCellChanged -= InventoryCellChangeReceive;
 	}
 
+	public void ChangeHotBarSelection(int index)
+	{
+		hotbarToolbar.ChangeSelection(index);
+	}
+
+	public void ChangeHotBarSelection(string name)
+	{
+		hotbarToolbar.ChangeSelection(name);
+	}
+
 	public void InventoryCellChangeCall(InventoryCell changedInventoryCell)
 	{
 		inventoryCellChanged?.Invoke(changedInventoryCell);
