@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
 
 	public MainInventory mainInventory;
 	public HotbarInventory hotbarInventory;
+	public HotbarToolbar hotbarToolbar;
 
 	private void OnEnable()
 	{
@@ -25,8 +26,9 @@ public class Player : MonoBehaviour
 		inputManager = InputManager.Instance;
 		mainInventory = MainInventory.Instance;
 		hotbarInventory = HotbarInventory.Instance;
+		hotbarToolbar = HotbarToolbar.Instance;
 
-		allFarmFields.AddRange(FindObjectsOfType<FarmField>());
+		allFarmFields.AddRange(FindObjectsOfType<FarmField>(true));
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -57,11 +59,15 @@ public class Player : MonoBehaviour
 
 	public void TapInteract(InputAction.CallbackContext context)
 	{
-		if (closestFarmField != null)
-		{
-			Debug.Log("Farm - Tap Interact!");
-			// closestFarmField.GetComponent<FarmField>().TapInteract(context);
-		}
+		// if (closestFarmField != null)
+		// {
+		// 	Debug.Log("Farm - Tap Interact!");
+
+		// 	// closestFarmField.GetComponent<FarmField>().TapInteract(context);
+		// }
+		Action useItemFunction = () => {};
+		hotbarToolbar.UseItem(ref useItemFunction);
+		useItemFunction();
 	}
 
 	public void HoldInteract(InputAction.CallbackContext context)

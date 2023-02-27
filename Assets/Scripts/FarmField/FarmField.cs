@@ -8,7 +8,7 @@ public class FarmField : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        farmFieldHighlight = GetComponentInChildren<FarmFieldHighlight>();
+        farmFieldHighlight = GetComponentInChildren<FarmFieldHighlight>(true);
 		ActivateHighlight(false);
     }
 

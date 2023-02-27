@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -100,6 +101,17 @@ public class HotbarToolbar : Singleton<HotbarToolbar>
 			else {
 				inventoryCell.Select(false);
 			}
+		}
+	}
+
+	public InventoryItem GetSelectedItem() {
+		return inventoryCells[SelectedIndex].InventoryItem;
+	}
+
+	public void UseItem(ref Action useItemFunction) {
+		InventoryItem inventoryItem = GetSelectedItem();
+		if (inventoryItem != null) {
+			useItemFunction = inventoryItem.Item.ItemData.OnUse;
 		}
 	}
 }
