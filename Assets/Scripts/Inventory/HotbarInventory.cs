@@ -76,10 +76,10 @@ public class HotbarInventory : Singleton<HotbarInventory>
 			InventoryCell inventoryCell = inventoryCells[i];
 			if (inventoryCell.InventoryItem != null)
 			{
-				Debug.Log("there is an item in the hotbar inventory cell: " + i);
+				// Debug.Log("there is an item in the hotbar inventory cell: " + i);
 				InventoryItem inventoryItem = inventoryCell.InventoryItem;
 				int count = inventoryManager.GetTotalItemCount(inventoryItem);
-				Debug.Log("count: " + count);
+				// Debug.Log("count: " + count);
 				if (count == 0)
 				{
 					inventoryCell.DestroyItem();

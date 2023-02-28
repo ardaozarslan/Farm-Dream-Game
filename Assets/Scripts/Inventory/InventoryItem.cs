@@ -36,7 +36,7 @@ public class InventoryItem : MonoBehaviour
 	{
 		inventoryManager = InventoryManager.Instance;
 		itemManager = ItemManager.Instance;
-		item = new Item(itemManager.GetItemData("Wheat"), 1);
+		item = new Item(itemManager.GetItemData("0"), 1);
 	}
 
 	private void Start()
@@ -73,7 +73,7 @@ public class InventoryItem : MonoBehaviour
 		{
 			// TODO: Destroy this object
 			item.stackSize = 0;
-			item = null;
+			// item = null;
 		}
 		UpdateSelf();
 		if (inventoryCell != null)
@@ -90,27 +90,35 @@ public class InventoryItem : MonoBehaviour
 		{
 			// TODO: Destroy this object
 			item.stackSize = 0;
-			item = null;
+			// item = null;
 		}
 		UpdateSelf();
+		if (inventoryCell != null)
+		{
+			inventoryCell.UpdateSelf();
+		}
 	}
 
 	public void UpdateSelf()
 	{
 		itemImage.sprite = item.sprite;
 		itemImage.color = Color.white;
-		if (item.isStackable)
+		switch (item.stackType)
 		{
-			itemStackSizeText.enabled = true;
-		}
-		else
-		{
-			itemStackSizeText.enabled = false;
+			case Item.StackType.Stackable:
+				itemStackSizeText.enabled = true;
+				break;
+			case Item.StackType.Durability:
+				itemStackSizeText.enabled = false;
+				break;
+			default:
+				itemStackSizeText.enabled = false;
+				break;
 		}
 		itemStackSizeText.text = item.stackSize.ToString();
 		// itemStackSizeText.text = item.id;
 	}
-	
+
 
 	public static bool IsSameItem(InventoryItem item1, InventoryItem item2)
 	{
@@ -119,10 +127,10 @@ public class InventoryItem : MonoBehaviour
 			return true;
 		}
 		else
-		{	
+		{
 			return false;
 		}
-	} 
+	}
 
 
 }

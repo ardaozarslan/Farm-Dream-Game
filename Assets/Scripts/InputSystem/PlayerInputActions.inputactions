@@ -42,6 +42,24 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "TapUse",
+                    "type": "Button",
+                    "id": "c14088ea-3ed5-45b3-be43-5c421838ad9b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HoldUse",
+                    "type": "Button",
+                    "id": "f0ea5574-6d01-4796-a923-3770344ce2a8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Inventory",
                     "type": "Button",
                     "id": "1196d0b9-dfeb-4ebf-a0ee-8f78a1a7ea4e",
@@ -370,6 +388,28 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "HotbarSelect8",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "09f3c094-77b1-44ee-be94-968b59f5e2dc",
+                    "path": "<Keyboard>/f",
+                    "interactions": "Tap",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "TapUse",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5c7879ec-0f1f-422c-a003-e695af7b5c67",
+                    "path": "<Keyboard>/f",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "HoldUse",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

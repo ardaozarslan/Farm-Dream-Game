@@ -108,10 +108,15 @@ public class HotbarToolbar : Singleton<HotbarToolbar>
 		return inventoryCells[SelectedIndex].InventoryItem;
 	}
 
-	public void UseItem(ref Action useItemFunction) {
+	public void UseItem(ref Action<Item> useItemFunction, out Item useItem) {
 		InventoryItem inventoryItem = GetSelectedItem();
 		if (inventoryItem != null) {
 			useItemFunction = inventoryItem.Item.ItemData.OnUse;
+			useItem = inventoryItem.Item;
+		}
+		else {
+			useItemFunction = null;
+			useItem = null;
 		}
 	}
 }

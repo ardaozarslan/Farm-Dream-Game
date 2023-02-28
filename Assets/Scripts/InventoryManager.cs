@@ -16,8 +16,8 @@ public class InventoryManager : Singleton<InventoryManager>
 	public List<InventoryCell> hotbarInventoryCells = new List<InventoryCell>();
 	public List<InventoryCell> hotbarToolbarCells = new List<InventoryCell>();
 
-	public Dictionary<ItemData, List<InventoryItem>> inventoryItems = new Dictionary<ItemData, List<InventoryItem>>();
-	public Dictionary<ItemData, int> inventoryItemCounts = new Dictionary<ItemData, int>();
+	public Dictionary<string, List<InventoryItem>> inventoryItems = new Dictionary<string, List<InventoryItem>>();
+	public Dictionary<string, int> inventoryItemCounts = new Dictionary<string, int>();
 
 	public delegate void InventoryCellChanged(InventoryCell inventoryCell);
 	public event InventoryCellChanged inventoryCellChanged;
@@ -59,7 +59,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
 	public void InventoryCellChangeReceive(InventoryCell changedInventoryCell)
 	{
-		Debug.Log("InventoryCellChangeReceive");
+		// Debug.Log("InventoryCellChangeReceive");
 		CalculateItemCounts();
 		SortMainInventory();
 		UpdateHotbarInventory();
@@ -70,30 +70,33 @@ public class InventoryManager : Singleton<InventoryManager>
 	{
 		// TODO: Optimize this so it doesn't have to loop through all the cells
 		// TODO: Find a better way to count items with unique id's (like tools: 52:23476283476)
-		inventoryItems = new Dictionary<ItemData, List<InventoryItem>>();
+		// Debug.Log("Starting to count items");
+		inventoryItems = new Dictionary<string, List<InventoryItem>>();
 		for (int i = 0; i < mainInventoryCells.Count; i++)
 		{
 			InventoryCell inventoryCell = mainInventoryCells[i];
 			if (inventoryCell.InventoryItem)
 			{
-				if (inventoryItems.ContainsKey(inventoryCell.InventoryItem.Item.ItemData))
+				if (inventoryItems.ContainsKey(inventoryCell.InventoryItem.Item.id))
 				{
-					inventoryItems[inventoryCell.InventoryItem.Item.ItemData].Add(inventoryCell.InventoryItem);
+					inventoryItems[inventoryCell.InventoryItem.Item.id].Add(inventoryCell.InventoryItem);
+
 				}
 				else
 				{
-					inventoryItems.Add(inventoryCell.InventoryItem.Item.ItemData, new List<InventoryItem> { inventoryCell.InventoryItem });
+					inventoryItems.Add(inventoryCell.InventoryItem.Item.id, new List<InventoryItem> { inventoryCell.InventoryItem });
 				}
+				// Debug.Log("added item to inventoryItems: " + inventoryCell.InventoryItem.Item.id + " " + inventoryCell.InventoryItem.Item.stackSize);
 			}
 		}
-		inventoryItemCounts = new Dictionary<ItemData, int>();
-		foreach (KeyValuePair<ItemData, List<InventoryItem>> entry in inventoryItems)
+		inventoryItemCounts = new Dictionary<string, int>();
+		foreach (KeyValuePair<string, List<InventoryItem>> entry in inventoryItems)
 		{
 			int count = 0;
 			for (int i = 0; i < entry.Value.Count; i++)
 			{
 				InventoryItem inventoryItem = entry.Value[i];
-				if (inventoryItem.Item.isStackable)
+				if (inventoryItem.Item.stackType == Item.StackType.Stackable)
 				{
 					count += entry.Value[i].Item.stackSize;
 				}
@@ -101,22 +104,28 @@ public class InventoryManager : Singleton<InventoryManager>
 			inventoryItemCounts.Add(entry.Key, count);
 		}
 		String inventoryItemsString = "";
-		foreach (KeyValuePair<ItemData, int> entry in inventoryItemCounts)
+		foreach (KeyValuePair<string, int> entry in inventoryItemCounts)
 		{
-			inventoryItemsString += entry.Key.name + ": " + entry.Value + "\n";
+			ItemData itemData = managersManager.itemManager.GetItemData(entry.Key);
+			inventoryItemsString += itemData.name + ": " + entry.Value + "\n";
+		}
+		if (inventoryItemsString.Length > 0)
+		{
+			inventoryItemsString = inventoryItemsString.Substring(0, inventoryItemsString.Length - 1);
 		}
 		Debug.Log(inventoryItemsString);
 	}
 
-	private void UpdateHotbarInventory() {
+	private void UpdateHotbarInventory()
+	{
 		hotbarInventory.UpdateInventory();
 	}
 
-	public int GetTotalItemCount(ItemData itemData)
+	public int GetTotalItemCount(string itemId)
 	{
-		if (inventoryItemCounts.ContainsKey(itemData))
+		if (inventoryItemCounts.ContainsKey(itemId))
 		{
-			return inventoryItemCounts[itemData];
+			return inventoryItemCounts[itemId];
 		}
 		else
 		{
@@ -126,10 +135,16 @@ public class InventoryManager : Singleton<InventoryManager>
 
 	public int GetTotalItemCount(InventoryItem inventoryItem)
 	{
-		return GetTotalItemCount(inventoryItem.Item.ItemData);
+		return GetTotalItemCount(inventoryItem.Item.id);
 	}
 
-	private void SortMainInventory() {
+	public int GetTotalItemCount(ItemData itemData)
+	{
+		return GetTotalItemCount(itemData.id);
+	}
+
+	private void SortMainInventory()
+	{
 		mainInventory.SortInventoryCells();
 	}
 
@@ -149,19 +164,41 @@ public class InventoryManager : Singleton<InventoryManager>
 		else
 		{
 			mainInventory.AddItem(item);
-			Debug.Log(item.name + " was added.");
-
-			// Logs all InventoryCells with items and their stackSize in them
-			// for (int i = 0; i < mainInventoryCells.Count; i++)
-			// {
-			// 	InventoryCell inventoryCell = mainInventoryCells[i];
-			// 	if (inventoryCell.InventoryItem) {
-			// 		Debug.Log(inventoryCell.InventoryItem.Item.name + " " + inventoryCell.InventoryItem.Item.stackSize);
-			// 	}
-			// }
+			// Debug.Log(item.name + " was added.");
 		}
 		Item remainingItem = new Item(item, remaining);
 		return remainingItem;
+	}
+
+	/// <summary>
+	/// First checks if there is enough items to remove. If there is, it removes the item and returns null. If there isn't, it returns the item with available stackSize.
+	/// </summary>
+	/// <param name="item">item to remove</param>
+	public Item RemoveItem(Item item)
+	{
+		int count = item.stackSize;
+		Item availableItem = CheckForItem(item);
+		if (availableItem == null || availableItem.stackSize < count)
+		{
+			Debug.Log("Not enough items to remove.");
+			return availableItem;
+		}
+		// REMOVE THE ITEM
+		mainInventory.RemoveItem(item);
+		return null;
+	}
+
+	public Item CheckForItem(Item item)
+	{
+		int available = GetTotalItemCount(item.ItemData);
+		if (available >= item.stackSize)
+		{
+			return new Item(item, item.stackSize);
+		}
+		else
+		{
+			return new Item(item, available);
+		}
 	}
 
 	public int CheckForSpace(Item item)

@@ -44,7 +44,11 @@ public class InventoryCell : MonoBehaviour
 
 	public void UpdateSelf()
 	{
-
+		if (inventoryItem != null && inventoryItem.Item.stackSize <= 0)
+		{
+			// Utils.Instance.InvokeNextFrame(DestroyItem);
+			DestroyItem();
+		}
 	}
 
 	public void DestroyItem()

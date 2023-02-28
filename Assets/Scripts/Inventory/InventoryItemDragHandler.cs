@@ -87,8 +87,9 @@ public class InventoryItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragH
 
 				inventoryItem.InventoryCell.gridLayoutGroup.enabled = true;
 				canvasGroup.blocksRaycasts = true;
-
 				inventoryItem.InitializeCell(targetCell);
+				
+				hotbarInventory.UpdateInventory();
 			}
 			else if (inventoryItem.InventoryCell.CellType == InventoryCell.cellType.MainInventory && targetCell.CellType == InventoryCell.cellType.HotbarInventory && hotbarInventory.CanAssignItem(targetCell, inventoryItem))
 			{
@@ -98,7 +99,8 @@ public class InventoryItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragH
 				inventoryItem.InventoryCell.gridLayoutGroup.enabled = true;
 				canvasGroup.blocksRaycasts = true;
 			}
-			else {
+			else
+			{
 				// Return the item to its original position
 				transform.SetParent(lastParent);
 				inventoryItem.InventoryCell.gridLayoutGroup.enabled = true;

@@ -18,4 +18,4 @@ MonoBehaviour:
   description: Weeding hoe tool
   sprite: {fileID: 21300000, guid: 976e62e95b0a7c947a187023de712279, type: 3}
   maxStackSize: 1
-  isStackable: 0
+  stackType: 200

@@ -64,6 +64,24 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""TapUse"",
+                    ""type"": ""Button"",
+                    ""id"": ""c14088ea-3ed5-45b3-be43-5c421838ad9b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HoldUse"",
+                    ""type"": ""Button"",
+                    ""id"": ""f0ea5574-6d01-4796-a923-3770344ce2a8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Inventory"",
                     ""type"": ""Button"",
                     ""id"": ""1196d0b9-dfeb-4ebf-a0ee-8f78a1a7ea4e"",
@@ -394,6 +412,28 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""HotbarSelect8"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""09f3c094-77b1-44ee-be94-968b59f5e2dc"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": ""Tap"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""TapUse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5c7879ec-0f1f-422c-a003-e695af7b5c67"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HoldUse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -457,6 +497,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_TapInteract = m_Player.FindAction("TapInteract", throwIfNotFound: true);
         m_Player_HoldInteract = m_Player.FindAction("HoldInteract", throwIfNotFound: true);
+        m_Player_TapUse = m_Player.FindAction("TapUse", throwIfNotFound: true);
+        m_Player_HoldUse = m_Player.FindAction("HoldUse", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         m_Player_HotbarDown = m_Player.FindAction("HotbarDown", throwIfNotFound: true);
         m_Player_HotbarUp = m_Player.FindAction("HotbarUp", throwIfNotFound: true);
@@ -534,6 +576,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_TapInteract;
     private readonly InputAction m_Player_HoldInteract;
+    private readonly InputAction m_Player_TapUse;
+    private readonly InputAction m_Player_HoldUse;
     private readonly InputAction m_Player_Inventory;
     private readonly InputAction m_Player_HotbarDown;
     private readonly InputAction m_Player_HotbarUp;
@@ -553,6 +597,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @TapInteract => m_Wrapper.m_Player_TapInteract;
         public InputAction @HoldInteract => m_Wrapper.m_Player_HoldInteract;
+        public InputAction @TapUse => m_Wrapper.m_Player_TapUse;
+        public InputAction @HoldUse => m_Wrapper.m_Player_HoldUse;
         public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
         public InputAction @HotbarDown => m_Wrapper.m_Player_HotbarDown;
         public InputAction @HotbarUp => m_Wrapper.m_Player_HotbarUp;
@@ -585,6 +631,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @HoldInteract.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHoldInteract;
                 @HoldInteract.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHoldInteract;
                 @HoldInteract.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHoldInteract;
+                @TapUse.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTapUse;
+                @TapUse.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTapUse;
+                @TapUse.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTapUse;
+                @HoldUse.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHoldUse;
+                @HoldUse.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHoldUse;
+                @HoldUse.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHoldUse;
                 @Inventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
                 @Inventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
                 @Inventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
@@ -634,6 +686,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @HoldInteract.started += instance.OnHoldInteract;
                 @HoldInteract.performed += instance.OnHoldInteract;
                 @HoldInteract.canceled += instance.OnHoldInteract;
+                @TapUse.started += instance.OnTapUse;
+                @TapUse.performed += instance.OnTapUse;
+                @TapUse.canceled += instance.OnTapUse;
+                @HoldUse.started += instance.OnHoldUse;
+                @HoldUse.performed += instance.OnHoldUse;
+                @HoldUse.canceled += instance.OnHoldUse;
                 @Inventory.started += instance.OnInventory;
                 @Inventory.performed += instance.OnInventory;
                 @Inventory.canceled += instance.OnInventory;
@@ -728,6 +786,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnTapInteract(InputAction.CallbackContext context);
         void OnHoldInteract(InputAction.CallbackContext context);
+        void OnTapUse(InputAction.CallbackContext context);
+        void OnHoldUse(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
         void OnHotbarDown(InputAction.CallbackContext context);
         void OnHotbarUp(InputAction.CallbackContext context);

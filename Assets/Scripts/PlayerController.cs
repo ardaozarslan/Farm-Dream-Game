@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
 		inputManager.playerInputActions.Player.Jump.performed += Jump;
 		inputManager.playerInputActions.Player.TapInteract.performed += TapInteract;
 		inputManager.playerInputActions.Player.HoldInteract.performed += HoldInteract;
+		inputManager.playerInputActions.Player.TapUse.performed += TapUse;
+		inputManager.playerInputActions.Player.HoldUse.performed += HoldUse;
 		inputManager.playerInputActions.Player.Inventory.performed += Inventory;
 
 		inputManager.playerInputActions.Player.HotbarUp.performed += HotbarUp;
@@ -42,6 +44,8 @@ public class PlayerController : MonoBehaviour
 		inputManager.playerInputActions.Player.Jump.performed -= Jump;
 		inputManager.playerInputActions.Player.TapInteract.performed -= TapInteract;
 		inputManager.playerInputActions.Player.HoldInteract.performed -= HoldInteract;
+		inputManager.playerInputActions.Player.TapUse.performed -= TapUse;
+		inputManager.playerInputActions.Player.HoldUse.performed -= HoldUse;
 		inputManager.playerInputActions.Player.Inventory.performed -= Inventory;
 
 		inputManager.playerInputActions.Player.HotbarUp.performed -= HotbarUp;
@@ -71,6 +75,18 @@ public class PlayerController : MonoBehaviour
 	{
 		// Debug.Log("Hold Interact!");
 		player.HoldInteract(context);
+	}
+
+	private void TapUse(InputAction.CallbackContext context)
+	{
+		// Debug.Log("Tap Use!");
+		player.TapUse(context);
+	}
+
+	private void HoldUse(InputAction.CallbackContext context)
+	{
+		// Debug.Log("Hold Use!");
+		player.HoldUse(context);
 	}
 
 	private void Inventory(InputAction.CallbackContext context)

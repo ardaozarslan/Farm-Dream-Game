@@ -12,7 +12,7 @@ public class Item
 	public Sprite sprite;
 	public int stackSize;
 	public int maxStackSize;
-	public bool isStackable;
+	public StackType stackType;
 	private ItemData itemData;
 	public ItemData ItemData { get { return itemData; } }
 
@@ -22,7 +22,16 @@ public class Item
 		Crop = 200,
 		Seed = 300,
 		Consumable = 400,
-		Other = 500
+		Other = 500,
+		None = 1000,
+	}
+
+	public enum StackType
+	{
+		Stackable = 100,
+		Durability = 200,
+		Other = 500,
+		None = 1000,
 	}
 
 	public Item(ItemData itemData, int stackSize = 1)
@@ -33,21 +42,24 @@ public class Item
 		this.sprite = itemData.sprite;
 		this.stackSize = stackSize;
 		this.maxStackSize = itemData.maxStackSize;
-		this.isStackable = itemData.isStackable;
+		this.stackType = itemData.stackType;
 		this.itemData = itemData;
 
-		if (!itemData.isStackable)
+		// InitId();
+		switch (this.itemData.stackType)
 		{
-			this.stackSize = 1;
-			System.Guid guid = System.Guid.NewGuid();
-			string guidString = guid.ToString();
-			this.id = itemData.id + ":" + guidString;
+			case StackType.Stackable:
+				this.id = this.itemData.id.ToString();
+				break;
+			case StackType.Durability:
+				this.stackSize = 1;
+				System.Guid guid = System.Guid.NewGuid();
+				string guidString = guid.ToString();
+				this.id = this.itemData.id + ":" + guidString;
+				break;
+			default:
+				break;
 		}
-		else {
-			this.id = itemData.id.ToString();
-		}
-
-
 	}
 
 	public Item(Item item, int stackSize = 1)
@@ -58,18 +70,41 @@ public class Item
 		this.sprite = item.sprite;
 		this.stackSize = stackSize;
 		this.maxStackSize = item.maxStackSize;
-		this.isStackable = item.isStackable;
+		this.stackType = item.stackType;
 		this.itemData = item.itemData;
 
-		if (!itemData.isStackable)
+		// InitId();
+		switch (this.itemData.stackType)
 		{
-			this.stackSize = 1;
-			System.Guid guid = System.Guid.NewGuid();
-			string guidString = guid.ToString();
-			this.id = item.id + ":" + guidString;
+			case StackType.Stackable:
+				this.id = this.itemData.id.ToString();
+				break;
+			case StackType.Durability:
+				this.stackSize = 1;
+				System.Guid guid = System.Guid.NewGuid();
+				string guidString = guid.ToString();
+				this.id = this.itemData.id + ":" + guidString;
+				break;
+			default:
+				break;
 		}
-		else {
-			this.id = item.id.ToString();
+	}
+
+	private void InitId()
+	{
+		switch (this.itemData.stackType)
+		{
+			case StackType.Stackable:
+				this.id = this.itemData.id.ToString();
+				break;
+			case StackType.Durability:
+				this.stackSize = 1;
+				System.Guid guid = System.Guid.NewGuid();
+				string guidString = guid.ToString();
+				this.id = this.itemData.id + ":" + guidString;
+				break;
+			default:
+				break;
 		}
 	}
 }

@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - FarmField
+  - FarmPushTrigger
+  - FarmPushSolid
   layers:
   - Default
   - TransparentFX

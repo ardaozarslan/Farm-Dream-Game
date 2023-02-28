@@ -6,15 +6,18 @@ using UnityEngine;
 public class ItemData : ScriptableObject
 {
 	public new string name;
-	public int id;
+	public string id;
 	public Item.ItemType itemType;
 	public string description;
 	public Sprite sprite;
 	public int maxStackSize;
-	public bool isStackable;
+	public Item.StackType stackType;
 
-	public virtual void OnUse()
+	public virtual GameObject GetPlantPrefab() { return null; }
+	public virtual float GetGrowTime() { return 0f; }
+
+	public virtual void OnUse(Item item = null)
 	{
-		Debug.Log("Using " + name);
+		Debug.Log("Using " + name + " without OnUse() override.");
 	}
 }

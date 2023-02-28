@@ -15,13 +15,13 @@ public class ItemManager : Singleton<ItemManager>
         itemDataObjects = new List<ItemData>(Resources.LoadAll<ItemData>("ItemData"));
     }
 
-	public ItemData GetItemData(int id) {
+	public ItemData GetItemData(string id) {
 		return itemDataObjects.Find(itemData => itemData.id == id);
 	}
 
-	public ItemData GetItemData(string name) {
-		return itemDataObjects.Find(itemData => itemData.name == name);
-	}
+	// public ItemData GetItemData(string name) {
+	// 	return itemDataObjects.Find(itemData => itemData.name == name);
+	// }
 
     // Update is called once per frame
     void Update()

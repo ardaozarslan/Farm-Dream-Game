@@ -38,13 +38,13 @@ public class InventoryController : MonoBehaviour
 
 	private void Update()
 	{
-		if (Keyboard.current.oKey.wasPressedThisFrame)
-		{
-			inventoryManager.AddItem(new Item(itemManager.GetItemData("Wheat"), 10));
-		}
-		if (Keyboard.current.pKey.wasPressedThisFrame)
-		{
-			inventoryManager.AddItem(new Item(itemManager.GetItemData("Strawberry"), 15));
-		}
+		// if (Keyboard.current.oKey.wasPressedThisFrame)
+		// {
+		// 	inventoryManager.AddItem(new Item(itemManager.GetItemData("Wheat"), 10));
+		// }
+		// if (Keyboard.current.pKey.wasPressedThisFrame)
+		// {
+		// 	inventoryManager.AddItem(new Item(itemManager.GetItemData("Strawberry"), 15));
+		// }
 	}
 }

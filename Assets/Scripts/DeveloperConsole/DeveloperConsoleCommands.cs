@@ -22,18 +22,20 @@ public class DeveloperConsoleCommands : MonoBehaviour
 		{
 			DeveloperConsole.Instance.InvokeCommand("add_item " + parameter + " 1");
 
-			Debug.Log("success execute command add_item with range number parameters " + parameter + " 1");
+			// Debug.Log("success execute command add_item with range number parameters " + parameter + " 1");
 		}));
 		DeveloperConsole.Instance.AddCommand(new DevCommand("add_item", "adds item with given [id] and (optional = 1)[count]", delegate (List<int> parameters)
 		{
-			Debug.Log("success execute command add_item with range number parameters " + string.Join(" ", parameters));
+			// Debug.Log("success execute command add_item with range number parameters " + string.Join(" ", parameters));
 			if (parameters.Count == 1)
 			{
-				inventoryManager.AddItem(new Item(itemManager.GetItemData(parameters[0]), 1));
+				string id = parameters[0].ToString();
+				inventoryManager.AddItem(new Item(itemManager.GetItemData(id), 1));
 			}
 			else if (parameters.Count == 2)
 			{
-				inventoryManager.AddItem(new Item(itemManager.GetItemData(parameters[0]), parameters[1]));
+				string id = parameters[0].ToString();
+				inventoryManager.AddItem(new Item(itemManager.GetItemData(id), parameters[1]));
 			}
 
 		}));

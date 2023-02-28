@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class Player : Singleton<Player>
 {
 	private Rigidbody rb;
 	private List<FarmField> allFarmFields = new List<FarmField>();
 	private List<FarmField> closeFarmFields = new List<FarmField>();
-	private FarmField closestFarmField;
+	public FarmField closestFarmField;
 	private InputManager inputManager;
 
 	public MainInventory mainInventory;
@@ -44,16 +44,30 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	private void OnTriggerStay(Collider other) {
+		if (other.CompareTag("FarmPushTrigger")) {
+			Vector3 pushDirection = transform.position - other.GetComponent<FarmPushTrigger>().transform.position;
+			pushDirection.y = 0;
+			float distance = Mathf.Max(0.05f, pushDirection.magnitude);
+			pushDirection.Normalize();
+			pushDirection *= Mathf.Min(5f, 1 / distance);
+			// Debug.Log("Pushing player: " + pushDirection + " distance: " + distance);
+			rb.AddForce(pushDirection * 20, ForceMode.Force);
+		}
+	}
+
 	void OnTriggerExit(Collider other)
 	{
 		if (other.CompareTag("FarmField"))
 		{
 			FarmField farmField = other.GetComponent<FarmField>();
-			// Debug.Log("Farm exited");
 			if (closeFarmFields.Contains(farmField))
 			{
 				closeFarmFields.Remove(farmField);
 			}
+		}
+		else if (other.CompareTag("FarmPushSolid")) {
+			other.GetComponent<Collider>().isTrigger = false;
 		}
 	}
 
@@ -61,22 +75,40 @@ public class Player : MonoBehaviour
 	{
 		// if (closestFarmField != null)
 		// {
-		// 	Debug.Log("Farm - Tap Interact!");
-
-		// 	// closestFarmField.GetComponent<FarmField>().TapInteract(context);
+		Debug.Log("Tap Interact!");
 		// }
-		Action useItemFunction = () => {};
-		hotbarToolbar.UseItem(ref useItemFunction);
-		useItemFunction();
 	}
 
 	public void HoldInteract(InputAction.CallbackContext context)
 	{
-		if (closestFarmField != null)
+		Debug.Log("Hold Interact!");
+	}
+
+	public void TapUse(InputAction.CallbackContext context)
+	{
+		Debug.Log("Tap Use!");
+		Action<Item> useItemFunction = (Item item) => { };
+		Item useItem = null;
+		hotbarToolbar.UseItem(ref useItemFunction, out useItem);
+		if (useItemFunction != null && useItem.itemType != Item.ItemType.None)
 		{
-			Debug.Log("Farm - Hold Interact!");
-			// closestFarmField.GetComponent<FarmField>().HoldInteract(context);
+			useItemFunction(useItem);
 		}
+	}
+
+	public void HoldUse(InputAction.CallbackContext context)
+	{
+		Debug.Log("Hold Use!");
+	}
+
+	public void PlantSeed(Item item, ref bool success)
+	{
+		if (closestFarmField == null)
+		{
+			success = false;
+			return;
+		}
+		closestFarmField.PlantSeed(item);
 	}
 
 	private void Update()
@@ -101,7 +133,8 @@ public class Player : MonoBehaviour
 		{
 			farmField.ActivateHighlight(false);
 		}
-		if (closestFarmField) {
+		if (closestFarmField)
+		{
 
 			closestFarmField.ActivateHighlight(true);
 		}

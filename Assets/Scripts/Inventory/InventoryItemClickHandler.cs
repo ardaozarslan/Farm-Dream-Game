@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InventoryItemClickHandler : MonoBehaviour, IPointerClickHandler
+public class InventoryItemClickHandler : MonoBehaviour, IPointerDownHandler
 {
 	private InventoryItem inventoryItem;
 
@@ -28,7 +28,7 @@ public class InventoryItemClickHandler : MonoBehaviour, IPointerClickHandler
 		hotbarInventory = HotbarInventory.Instance;
 	}
 
-	public void OnPointerClick(PointerEventData eventData)
+	public void OnPointerDown(PointerEventData eventData)
 	{
 		if (eventData.button == PointerEventData.InputButton.Right)
 		{
@@ -37,6 +37,7 @@ public class InventoryItemClickHandler : MonoBehaviour, IPointerClickHandler
 				inventoryItem.InventoryCell.DestroyItem();
 				inventoryItem.InventoryCell.InventoryItem = null;
 				inventoryItem.InventoryCell.UpdateSelf();
+				hotbarInventory.UpdateInventory();
 			}
 		}
 	}
