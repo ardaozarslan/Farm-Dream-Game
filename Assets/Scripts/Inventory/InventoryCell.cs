@@ -46,6 +46,7 @@ public class InventoryCell : MonoBehaviour
 	{
 		if (inventoryItem != null && inventoryItem.Item.stackSize <= 0)
 		{
+			// Debug.Log("I'm destroying the item :D");
 			// Utils.Instance.InvokeNextFrame(DestroyItem);
 			DestroyItem();
 		}

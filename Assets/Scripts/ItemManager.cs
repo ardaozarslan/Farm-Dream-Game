@@ -6,16 +6,19 @@ using UnityEngine;
 
 public class ItemManager : Singleton<ItemManager>
 {
-	public List<ItemData> itemDataObjects;
+	public List<BaseItemData> itemDataObjects;
 	public ManagersManager managersManager;
     // Start is called before the first frame update
     void Start()
     {
 		managersManager = ManagersManager.Instance;
-        itemDataObjects = new List<ItemData>(Resources.LoadAll<ItemData>("ItemData"));
+        itemDataObjects = new List<BaseItemData>(Resources.LoadAll<BaseItemData>("ItemData"));
     }
 
-	public ItemData GetItemData(string id) {
+	public BaseItemData GetItemData(string id) {
+		if (id.Contains(":")) {
+			id = id.Split(':')[0];
+		}
 		return itemDataObjects.Find(itemData => itemData.id == id);
 	}
 

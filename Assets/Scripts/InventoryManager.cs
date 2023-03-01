@@ -76,14 +76,15 @@ public class InventoryManager : Singleton<InventoryManager>
 			InventoryCell inventoryCell = mainInventoryCells[i];
 			if (inventoryCell.InventoryItem)
 			{
-				if (inventoryItems.ContainsKey(inventoryCell.InventoryItem.Item.id))
+				Debug.Log("item name: " + inventoryCell.InventoryItem.Item.name + " item stack size: " + inventoryCell.InventoryItem.Item.stackSize + " item id: " + inventoryCell.InventoryItem.Item.GetFullId() + " item type: " + inventoryCell.InventoryItem.Item.itemType);
+				if (inventoryItems.ContainsKey(inventoryCell.InventoryItem.Item.GetFullId()))
 				{
-					inventoryItems[inventoryCell.InventoryItem.Item.id].Add(inventoryCell.InventoryItem);
+					inventoryItems[inventoryCell.InventoryItem.Item.GetFullId()].Add(inventoryCell.InventoryItem);
 
 				}
 				else
 				{
-					inventoryItems.Add(inventoryCell.InventoryItem.Item.id, new List<InventoryItem> { inventoryCell.InventoryItem });
+					inventoryItems.Add(inventoryCell.InventoryItem.Item.GetFullId(), new List<InventoryItem> { inventoryCell.InventoryItem });
 				}
 			}
 		}
@@ -104,14 +105,19 @@ public class InventoryManager : Singleton<InventoryManager>
 		String inventoryItemsString = "";
 		foreach (KeyValuePair<string, int> entry in inventoryItemCounts)
 		{
-			ItemData itemData = managersManager.itemManager.GetItemData(entry.Key);
+			BaseItemData itemData = managersManager.itemManager.GetItemData(entry.Key);
+			Debug.Log("item count: " + entry.Value);
+			Debug.Log("item name: " + itemData.name);
 			inventoryItemsString += itemData.name + ": " + entry.Value + "\n";
 		}
 		if (inventoryItemsString.Length > 0)
 		{
 			inventoryItemsString = inventoryItemsString.Substring(0, inventoryItemsString.Length - 1);
 		}
-		Debug.Log(inventoryItemsString);
+		if (inventoryItemsString.Length > 0)
+		{
+			Debug.Log(inventoryItemsString);
+		}
 	}
 
 	private void UpdateHotbarInventory()
@@ -133,12 +139,12 @@ public class InventoryManager : Singleton<InventoryManager>
 
 	public int GetTotalItemCount(InventoryItem inventoryItem)
 	{
-		return GetTotalItemCount(inventoryItem.Item.id);
+		return GetTotalItemCount(inventoryItem.Item.GetFullId());
 	}
 
-	public int GetTotalItemCount(ItemData itemData)
+	public int GetTotalItemCount(Item item)
 	{
-		return GetTotalItemCount(itemData.id);
+		return GetTotalItemCount(item.GetFullId());
 	}
 
 	private void SortMainInventory()
@@ -188,7 +194,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
 	public Item CheckForItem(Item item)
 	{
-		int available = GetTotalItemCount(item.ItemData);
+		int available = GetTotalItemCount(item);
 		if (available >= item.stackSize)
 		{
 			return new Item(item, item.stackSize);
@@ -207,7 +213,7 @@ public class InventoryManager : Singleton<InventoryManager>
 		for (int index = 0; index < mainInventoryCells.Count; index++)
 		{
 			InventoryCell inventoryCell = mainInventoryCells[index];
-			if (inventoryCell.InventoryItem != null && inventoryCell.InventoryItem.Item.id == item.id && inventoryCell.InventoryItem.Item.stackSize < item.maxStackSize)
+			if (inventoryCell.InventoryItem != null && inventoryCell.InventoryItem.Item.GetFullId() == item.GetFullId() && inventoryCell.InventoryItem.Item.stackSize < item.maxStackSize)
 			{
 				// Debug.Log("Found existing stack for item: " + item.name + " at index: " + index);
 				int space = item.maxStackSize - inventoryCell.InventoryItem.Item.stackSize;

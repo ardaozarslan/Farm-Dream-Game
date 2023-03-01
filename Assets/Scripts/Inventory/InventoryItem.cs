@@ -114,13 +114,12 @@ public class InventoryItem : MonoBehaviour
 				break;
 		}
 		itemStackSizeText.text = item.stackSize.ToString();
-		// itemStackSizeText.text = item.id;
 	}
 
 
 	public static bool IsSameItem(InventoryItem item1, InventoryItem item2)
 	{
-		if (item1.Item.ItemData.id == item2.Item.ItemData.id)
+		if (item1.Item.GetFullId() == item2.Item.GetFullId())
 		{
 			return true;
 		}

@@ -76,6 +76,7 @@ namespace CodeMonkey.Utils {
 
             GameObject gameObject = new GameObject("FunctionUpdater Object " + functionName, typeof(MonoBehaviourHook));
             FunctionUpdater functionUpdater = new FunctionUpdater(gameObject, updateFunc, functionName, active);
+			gameObject.transform.SetParent(initGameObject.transform);
             gameObject.GetComponent<MonoBehaviourHook>().OnUpdate = functionUpdater.Update;
 
             updaterList.Add(functionUpdater);

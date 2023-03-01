@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06fa391e386b5fb42b807da5175cf235, type: 3}
+  m_Script: {fileID: 11500000, guid: 7580374c766978f4898572e337a4cf9c, type: 3}
   m_Name: Wheat
   m_EditorClassIdentifier: 
   name: Wheat
   id: 0
-  itemType: 200
   description: Cropped wheat
   sprite: {fileID: 21300000, guid: d8e52b470146c1442b4673e2583c29be, type: 3}
   maxStackSize: 64
+  itemType: 200
   stackType: 100

@@ -35,10 +35,17 @@ public class HotbarInventory : Singleton<HotbarInventory>
 
 	public bool CanAssignItem(InventoryCell inventoryCell, InventoryItem inventoryItem)
 	{
+
+		// TODO: Check if item has any use case in hotbar, if not, return false (or not :shrug:)
+		return true;
+	}
+
+	public void AssignItem(InventoryItem inventoryItem, InventoryCell inventoryCell)
+	{
 		for (int i = 0; i < inventoryCells.Count; i++)
 		{
 			InventoryCell currentInventoryCell = inventoryCells[i];
-			if (currentInventoryCell.InventoryItem != null && currentInventoryCell.InventoryItem.Item.id == inventoryItem.Item.id)
+			if (currentInventoryCell.InventoryItem != null && currentInventoryCell.InventoryItem.Item.GetFullId() == inventoryItem.Item.GetFullId())
 			{
 				currentInventoryCell.DestroyItem();
 				currentInventoryCell.InventoryItem = null;
@@ -52,17 +59,21 @@ public class HotbarInventory : Singleton<HotbarInventory>
 			inventoryCell.InventoryItem = null;
 			inventoryCell.UpdateSelf();
 		}
-		// TODO: Check if item has any use case in hotbar, if not, return false (or not :shrug:)
-		return true;
-	}
 
-	public void AssignItem(InventoryItem inventoryItem, InventoryCell inventoryCell)
-	{
 		inventoryCell.InventoryItem = Instantiate(inventoryManager.inventoryItemPrefab, inventoryCell.transform).GetComponent<InventoryItem>();
+		// Debug.Log("inventoryCell.InventoryItem1: " + inventoryCell.InventoryItem);
 		inventoryCell.InventoryItem.Item = new Item(inventoryItem.Item.ItemData, inventoryManager.GetTotalItemCount(inventoryItem));
-		inventoryCell.InventoryItem.UpdateStackSize(inventoryManager.GetTotalItemCount(inventoryItem));
+		inventoryCell.InventoryItem.Item.id = inventoryItem.Item.id;
+		// Debug.Log("inventoryCell.InventoryItem2: " + inventoryCell.InventoryItem);
+		if (inventoryCell.InventoryItem.Item.ItemData.GetStackType() == Item.StackType.Stackable)
+		{
+			inventoryCell.InventoryItem.UpdateStackSize(inventoryManager.GetTotalItemCount(inventoryItem));
+			// Debug.Log("inventoryCell.InventoryItem3: " + inventoryCell.InventoryItem);
+		}
 		inventoryCell.InventoryItem.InitializeCell(inventoryCell);
+		Debug.Log("inventoryCell.InventoryItem4: " + inventoryCell.InventoryItem);
 		inventoryCell.InventoryItem.UpdateSelf();
+		Debug.Log("inventoryCell.InventoryItem5: " + inventoryCell.InventoryItem);
 		// inventoryCell.InventoryItem.GetComponent<CanvasGroup>().blocksRaycasts = false;
 		inventoryCell.UpdateSelf();
 
@@ -78,6 +89,12 @@ public class HotbarInventory : Singleton<HotbarInventory>
 			{
 				// Debug.Log("there is an item in the hotbar inventory cell: " + i);
 				InventoryItem inventoryItem = inventoryCell.InventoryItem;
+				if (inventoryItem.Item.ItemData.GetStackType() != Item.StackType.Stackable)
+				{
+					inventoryItem.UpdateSelf();
+					inventoryCell.UpdateSelf();
+					continue;
+				}
 				int count = inventoryManager.GetTotalItemCount(inventoryItem);
 				// Debug.Log("count: " + count);
 				if (count == 0)

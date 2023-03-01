@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06fa391e386b5fb42b807da5175cf235, type: 3}
+  m_Script: {fileID: 11500000, guid: bc9a6080390577d4184746ab02aed8f9, type: 3}
   m_Name: Shovel
   m_EditorClassIdentifier: 
   name: Shovel
   id: 51
-  itemType: 100
   description: Shovel tool
   sprite: {fileID: 21300000, guid: e69efd03e1b93014b80daeb626b9d720, type: 3}
   maxStackSize: 1

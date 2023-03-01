@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e62d417b80b6f043857dc70a857d453, type: 3}
+  m_Name: Hoe
+  m_EditorClassIdentifier: 
+  name: Hoe
+  id: 53
+  description: Hoe tool
+  sprite: {fileID: 21300000, guid: 976e62e95b0a7c947a187023de712279, type: 3}
+  maxStackSize: 1
+  stackType: 200

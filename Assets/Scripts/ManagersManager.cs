@@ -16,7 +16,7 @@ public class ManagersManager : Singleton<ManagersManager>
 		itemManager = ItemManager.Instance;
 		inventoryManager = InventoryManager.Instance;
 
-		// TODO: Check this later if it works
+		// TODO: Check this later if it works (DOES NOT WORK)
 		Canvas.ForceUpdateCanvases();
 	}
 }

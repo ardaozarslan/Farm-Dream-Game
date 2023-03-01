@@ -93,6 +93,7 @@ public class InventoryItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragH
 			}
 			else if (inventoryItem.InventoryCell.CellType == InventoryCell.cellType.MainInventory && targetCell.CellType == InventoryCell.cellType.HotbarInventory && hotbarInventory.CanAssignItem(targetCell, inventoryItem))
 			{
+				Debug.Log("Assigning item to hotbar inventory");
 				// Update the inventory cells
 				transform.SetParent(lastParent);
 				hotbarInventory.AssignItem(inventoryItem, targetCell);
@@ -101,6 +102,7 @@ public class InventoryItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragH
 			}
 			else
 			{
+				Debug.Log("Returning item to original position");
 				// Return the item to its original position
 				transform.SetParent(lastParent);
 				inventoryItem.InventoryCell.gridLayoutGroup.enabled = true;

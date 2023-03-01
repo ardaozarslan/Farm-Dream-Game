@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [CreateAssetMenu(fileName = "SeedItemData", menuName = "ScriptableObjects/SeedItemData", order = 1)]
-public class SeedItemData : ItemData
+public class SeedItemData : BaseItemData
 {
-	// public CropItemData cropItemData;
+	public Item.ItemType itemType = Item.ItemType.Seed;
+	public Item.StackType stackType = Item.StackType.Stackable;
 
 	[Range(1f, 60f)]
 	[Tooltip("How long it takes for the plant to grow in seconds")]
@@ -25,6 +27,8 @@ public class SeedItemData : ItemData
 
 	public GameObject plantPrefab;
 
+	public override Item.ItemType GetItemType() { return itemType; }
+	public override Item.StackType GetStackType() { return stackType; }
 	public override GameObject GetPlantPrefab() { return plantPrefab; }
 	public override float GetGrowTime() { return growTime; }
 	public override float GetGrowTimeVariance() { return growTimeVariance; }

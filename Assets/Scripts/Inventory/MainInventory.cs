@@ -37,7 +37,7 @@ public class MainInventory : Singleton<MainInventory>
 		for (int index = 0; index < inventoryCells.Count; index++)
 		{
 			InventoryCell inventoryCell = inventoryCells[index];
-			if (inventoryCell.InventoryItem != null && inventoryCell.InventoryItem.Item.id == item.id && inventoryCell.InventoryItem.Item.stackSize < item.maxStackSize)
+			if (inventoryCell.InventoryItem != null && inventoryCell.InventoryItem.Item.GetFullId() == item.GetFullId() && inventoryCell.InventoryItem.Item.stackSize < item.maxStackSize)
 			{
 				// Debug.Log("Found existing stack for item: " + item.name + " at index: " + index + " with stack size: " + inventoryCell.InventoryItem.Item.stackSize);
 				// Debug.Log("remaining count: " + count + " and space: " + (item.maxStackSize - inventoryCell.InventoryItem.Item.stackSize));
@@ -85,7 +85,7 @@ public class MainInventory : Singleton<MainInventory>
 		for (int index = 0; index < inventoryCells.Count; index++)
 		{
 			InventoryCell inventoryCell = inventoryCells[index];
-			if (inventoryCell.InventoryItem != null && inventoryCell.InventoryItem.Item.id == item.id)
+			if (inventoryCell.InventoryItem != null && inventoryCell.InventoryItem.Item.GetFullId() == item.GetFullId())
 			{
 				inventoryCellsWithSameItem.Add(inventoryCell);
 			}
@@ -138,8 +138,9 @@ public class MainInventory : Singleton<MainInventory>
 			if (i2 == null && i1 != null) return -1;
 			if (i1 == null && i2 == null) return 0;
 
+			// TODO: Sort durability items by durability
 			int result = i1.Item.itemType.CompareTo(i2.Item.itemType);
-			result = result == 0 ? i1.Item.id.CompareTo(i2.Item.id) : result;
+			result = result == 0 ? i1.Item.GetFullId().CompareTo(i2.Item.GetFullId()) : result;
 			result = result == 0 ? i1.Item.stackSize.CompareTo(i2.Item.stackSize) * -1 : result;
 			return result;
 		});

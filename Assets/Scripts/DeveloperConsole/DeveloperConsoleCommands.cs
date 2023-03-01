@@ -39,5 +39,11 @@ public class DeveloperConsoleCommands : MonoBehaviour
 			}
 
 		}));
+
+		DeveloperConsole.Instance.AddCommand(new DevCommand("seed", "adds 30 tomato seeds", delegate ()
+		{
+			inventoryManager.AddItem(new Item(itemManager.GetItemData("101"), 30));
+
+		}));
 	}
 }

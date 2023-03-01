@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06fa391e386b5fb42b807da5175cf235, type: 3}
+  m_Script: {fileID: 11500000, guid: 7580374c766978f4898572e337a4cf9c, type: 3}
   m_Name: Tomato
   m_EditorClassIdentifier: 
   name: Tomato
   id: 2
-  itemType: 200
   description: Cropped tomato
   sprite: {fileID: 21300000, guid: 2bb996f333a6cec40be33328859ee496, type: 3}
   maxStackSize: 64
   stackType: 100
+  itemType: 200

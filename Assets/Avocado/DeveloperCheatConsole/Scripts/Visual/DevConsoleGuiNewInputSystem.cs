@@ -18,6 +18,10 @@ namespace Avocado.DeveloperCheatConsole.Scripts.Visual {
                 if (_console.ShowConsole) {
                     HandleEscape();
                 }
+            }else if (keyboard.tabKey.wasPressedThisFrame) {
+                if (_console.ShowConsole) {
+                    HandleEscape();
+                }
             }else if (keyboard.upArrowKey.wasPressedThisFrame) {
                 _input = _console.GetBufferCommand(false);
                 GUI.FocusControl("inputField");
