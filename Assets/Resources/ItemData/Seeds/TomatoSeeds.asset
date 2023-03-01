@@ -20,5 +20,7 @@ MonoBehaviour:
   maxStackSize: 64
   stackType: 100
   growTime: 10
+  growScale: 1.5
+  growScaleVariance: 0.2
   useCount: 1
   plantPrefab: {fileID: 5814941669311897096, guid: 1246aae5c65a27c4790782fab40f2424, type: 3}

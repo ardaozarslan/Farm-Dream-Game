@@ -15,6 +15,9 @@ public class ItemData : ScriptableObject
 
 	public virtual GameObject GetPlantPrefab() { return null; }
 	public virtual float GetGrowTime() { return 0f; }
+	public virtual float GetGrowTimeVariance() { return 0f; }
+	public virtual float GetGrowScale() { return 1f; }
+	public virtual float GetGrowScaleVariance() { return 0f; }
 
 	public virtual void OnUse(Item item = null)
 	{

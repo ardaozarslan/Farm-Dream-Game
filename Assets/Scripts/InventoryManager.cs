@@ -68,9 +68,8 @@ public class InventoryManager : Singleton<InventoryManager>
 
 	private void CalculateItemCounts()
 	{
-		// TODO: Optimize this so it doesn't have to loop through all the cells
+		// TODO: Optimize this so it doesn't have to loop through all the cells (maybe it is not a big problem?)
 		// TODO: Find a better way to count items with unique id's (like tools: 52:23476283476)
-		// Debug.Log("Starting to count items");
 		inventoryItems = new Dictionary<string, List<InventoryItem>>();
 		for (int i = 0; i < mainInventoryCells.Count; i++)
 		{
@@ -86,7 +85,6 @@ public class InventoryManager : Singleton<InventoryManager>
 				{
 					inventoryItems.Add(inventoryCell.InventoryItem.Item.id, new List<InventoryItem> { inventoryCell.InventoryItem });
 				}
-				// Debug.Log("added item to inventoryItems: " + inventoryCell.InventoryItem.Item.id + " " + inventoryCell.InventoryItem.Item.stackSize);
 			}
 		}
 		inventoryItemCounts = new Dictionary<string, int>();

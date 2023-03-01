@@ -71,9 +71,8 @@ public class InventoryItem : MonoBehaviour
 		item.stackSize = amount;
 		if (item.stackSize <= 0)
 		{
-			// TODO: Destroy this object
 			item.stackSize = 0;
-			// item = null;
+			// Destroying this item is handled in inventory cell's UpdateSelf()
 		}
 		UpdateSelf();
 		if (inventoryCell != null)
@@ -88,9 +87,8 @@ public class InventoryItem : MonoBehaviour
 		item.stackSize = amount;
 		if (item.stackSize <= 0)
 		{
-			// TODO: Destroy this object
 			item.stackSize = 0;
-			// item = null;
+			// Destroying this item is handled in inventory cell's UpdateSelf()
 		}
 		UpdateSelf();
 		if (inventoryCell != null)

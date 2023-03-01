@@ -52,7 +52,7 @@ public class HotbarInventory : Singleton<HotbarInventory>
 			inventoryCell.InventoryItem = null;
 			inventoryCell.UpdateSelf();
 		}
-		// TODO: Check if item has any use case in hotbar, if not, return false
+		// TODO: Check if item has any use case in hotbar, if not, return false (or not :shrug:)
 		return true;
 	}
 

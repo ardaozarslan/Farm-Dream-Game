@@ -12,6 +12,8 @@ public class Player : Singleton<Player>
 	public FarmField closestFarmField;
 	private InputManager inputManager;
 
+	public GameObject playerDebugObject;
+
 	public MainInventory mainInventory;
 	public HotbarInventory hotbarInventory;
 	public HotbarToolbar hotbarToolbar;
@@ -44,8 +46,10 @@ public class Player : Singleton<Player>
 		}
 	}
 
-	private void OnTriggerStay(Collider other) {
-		if (other.CompareTag("FarmPushTrigger")) {
+	private void OnTriggerStay(Collider other)
+	{
+		if (other.CompareTag("FarmPushTrigger"))
+		{
 			Vector3 pushDirection = transform.position - other.GetComponent<FarmPushTrigger>().transform.position;
 			pushDirection.y = 0;
 			float distance = Mathf.Max(0.05f, pushDirection.magnitude);
@@ -66,8 +70,17 @@ public class Player : Singleton<Player>
 				closeFarmFields.Remove(farmField);
 			}
 		}
-		else if (other.CompareTag("FarmPushSolid")) {
-			other.GetComponent<Collider>().isTrigger = false;
+		else if (other.CompareTag("FarmPushSolid"))
+		{
+			other.isTrigger = false;
+			// other.GetComponentInParent<FarmField>().farmPushTriggerCollider.enabled = false;
+		}
+		else if (other.CompareTag("FarmPushTrigger"))
+		{
+			if (!other.GetComponentInParent<FarmField>().farmPushSolidCollider.isTrigger)
+			{
+				other.GetComponentInParent<FarmField>().farmPushTriggerCollider.enabled = false;
+			}
 		}
 	}
 
@@ -105,6 +118,13 @@ public class Player : Singleton<Player>
 	{
 		if (closestFarmField == null)
 		{
+			Utils.CreateWorldTextPopup("No farm\nfield nearby!", playerDebugObject.transform, null, Color.red);
+			success = false;
+			return;
+		}
+		else if (closestFarmField.farmState != FarmField.FarmState.Empty)
+		{
+			Utils.CreateWorldTextPopup("Farm field is\not empty!", playerDebugObject.transform, null, Color.red);
 			success = false;
 			return;
 		}
@@ -137,6 +157,14 @@ public class Player : Singleton<Player>
 		{
 
 			closestFarmField.ActivateHighlight(true);
+		}
+	}
+
+	private void FixedUpdate()
+	{
+		if (playerDebugObject != null)
+		{
+			playerDebugObject.transform.position = transform.position + Vector3.up * 0.5f;
 		}
 	}
 }

@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4438799303147996657}
-  - component: {fileID: 1099730767727180531}
+  - component: {fileID: 5557766033719877309}
   m_Layer: 0
   m_Name: FarmPushSolidCollider
   m_TagString: FarmPushSolid
@@ -115,8 +115,8 @@ Transform:
   m_Father: {fileID: 1043323625096792427}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &1099730767727180531
-CapsuleCollider:
+--- !u!65 &5557766033719877309
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -125,10 +125,9 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 6e2b88231e883a64cbd3a36ebec4c1c4, type: 2}
   m_IsTrigger: 1
   m_Enabled: 0
-  m_Radius: 0.9
-  m_Height: 7
-  m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &3273063968688612279
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,7 +290,7 @@ MonoBehaviour:
   farmFieldHighlight: {fileID: 0}
   farmPushTrigger: {fileID: 5382700409998633260}
   farmPushTriggerCollider: {fileID: 3453131788379423577}
-  farmPushSolidCollider: {fileID: 1099730767727180531}
+  farmPushSolidCollider: {fileID: 5557766033719877309}
   plant: {fileID: 0}
 --- !u!65 &4777949589333954666
 BoxCollider:

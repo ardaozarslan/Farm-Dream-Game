@@ -19,6 +19,9 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 8dfc79d73edb17640a7baa5a11e6dd14, type: 3}
   maxStackSize: 64
   stackType: 100
-  growTime: 10
+  growTime: 5
+  growTimeVariance: 1
+  growScale: 1.2
+  growScaleVariance: 0.1
   useCount: 1
   plantPrefab: {fileID: 7710806411185101477, guid: 03335ac81b1a76744918e3b89c478281, type: 3}
