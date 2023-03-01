@@ -124,7 +124,7 @@ public class Player : Singleton<Player>
 		}
 		else if (closestFarmField.farmState != FarmField.FarmState.Empty)
 		{
-			Utils.CreateWorldTextPopup("Farm field is\not empty!", playerDebugObject.transform, null, Color.red);
+			Utils.CreateWorldTextPopup("Farm field is\nnot empty!", playerDebugObject.transform, null, Color.red);
 			success = false;
 			return;
 		}
@@ -164,7 +164,7 @@ public class Player : Singleton<Player>
 	{
 		if (playerDebugObject != null)
 		{
-			playerDebugObject.transform.position = transform.position + Vector3.up * 0.5f;
+			playerDebugObject.transform.position = transform.position + Vector3.up * 1.5f;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ManagersManager : Singleton<ManagersManager>
 {
@@ -14,5 +15,8 @@ public class ManagersManager : Singleton<ManagersManager>
 		uiManager = UIManager.Instance;
 		itemManager = ItemManager.Instance;
 		inventoryManager = InventoryManager.Instance;
+
+		// TODO: Check this later if it works
+		Canvas.ForceUpdateCanvases();
 	}
 }

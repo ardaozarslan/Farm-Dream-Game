@@ -105,7 +105,7 @@ namespace CodeMonkey.Utils {
             GameObject gameObject = new GameObject("World_Text", typeof(TextMesh));
             Transform transform = gameObject.transform;
             transform.SetParent(parent, false);
-            // transform.localPosition = localPosition;
+            transform.localPosition = localPosition;
             TextMesh textMesh = gameObject.GetComponent<TextMesh>();
             textMesh.anchor = textAnchor;
             textMesh.alignment = textAlignment;
@@ -123,12 +123,12 @@ namespace CodeMonkey.Utils {
         }
         
         // Create a Text Popup in the World
-        public static void CreateWorldTextPopup(Transform parent, string text, Vector3 localPosition, int fontSize, Color color, Vector3 finalPopupPosition, float popupTime) {
+        public static void CreateWorldTextPopup(Transform parent, string text, Vector3 localPosition, int fontSize, Color color, Vector3 finalPopupLocalPosition, float popupTime) {
             TextMesh textMesh = CreateWorldText(parent, text, localPosition, fontSize, color, TextAnchor.MiddleCenter, TextAlignment.Center, sortingOrderDefault);
             Transform transform = textMesh.transform;
-            Vector3 moveAmount = (finalPopupPosition - localPosition) / popupTime;
+            Vector3 moveAmount = (finalPopupLocalPosition - localPosition) / popupTime;
             FunctionUpdater.Create(delegate () {
-                transform.position += moveAmount * Time.unscaledDeltaTime;
+                transform.localPosition += moveAmount * Time.unscaledDeltaTime;
                 popupTime -= Time.unscaledDeltaTime;
                 if (popupTime <= 0f) {
                     UnityEngine.Object.Destroy(transform.gameObject);

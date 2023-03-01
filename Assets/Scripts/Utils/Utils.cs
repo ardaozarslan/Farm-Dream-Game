@@ -67,19 +67,32 @@ public static class Utils
 			   System.Array.IndexOf(overlappingColliders, collider2) != -1;
 	}
 
-	public static void CreateWorldTextPopup(string text, Transform parent, Vector3? localScale = null, Color? color = null) {
-		CreateWorldTextPopup(parent, text, parent.position + Vector3.up * 0.5f, 40, color ?? Color.white, parent.position + Vector3.up * 3f, 1f, localScale ?? Vector3.one * 0.2f);
+	public static void CreateWorldTextPopup(string text, Transform parent, Vector3? localScale = null, Color? color = null)
+	{
+		CreateWorldTextPopup(parent, text, 40, color ?? Color.white, 1f, localScale ?? Vector3.one * 0.2f);
 	}
 
-	public static void CreateWorldTextPopup(Transform parent, string text, Vector3 localPosition, int fontSize, Color color, Vector3 finalPopupPosition, float popupTime, Vector3 localScale)
+	public static void CreateWorldTextPopup(Transform parent, string text, int fontSize, Color color, float popupTime, Vector3 localScale)
 	{
+		if (!Globals.Instance.showDebugPopupText) return;
+
+		float riseStartAmount = 1.25f;
+		float riseAmount = 5f;
+
+		Vector3 startPosition = parent.position + Vector3.up * riseStartAmount;
 		GameObject textParentObject = new GameObject("WorldTextPopupParent");
 		textParentObject.transform.localScale = localScale;
-		textParentObject.transform.position = parent.position;
+		textParentObject.transform.position = startPosition;
 		textParentObject.transform.SetParent(parent, true);
-		CodeMonkey.Utils.UtilsClass.CreateWorldTextPopup(textParentObject.transform, text, Vector3.zero, fontSize, color, finalPopupPosition - localPosition, popupTime);
-
 		textParentObject.transform.RotateAround(textParentObject.transform.position, Vector3.right, Camera.main.transform.rotation.eulerAngles.x);
+
+		Vector3 finalPopupLocalToDummyPosition = textParentObject.transform.localPosition + Vector3.up * riseAmount;
+		Vector3 finalPopupWorldPosition = textParentObject.transform.TransformPoint(finalPopupLocalToDummyPosition);
+		Vector3 finapPopupLocalPosition = textParentObject.transform.InverseTransformPoint(finalPopupWorldPosition);
+
+		CodeMonkey.Utils.UtilsClass.CreateWorldTextPopup(textParentObject.transform, text, Vector3.zero, fontSize, color, finapPopupLocalPosition, popupTime);
+
+
 		WaitForSecondsAndInvoke(popupTime, () =>
 		{
 			InvokeNextFrame(() =>
