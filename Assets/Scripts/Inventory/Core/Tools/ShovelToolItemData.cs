@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [CreateAssetMenu(fileName = "ShovelToolItemData", menuName = "ScriptableObjects/Tools/ShovelToolItemData", order = 1)]
-public class ShovelToolItemData : BaseItemData
+public class ShovelToolItemData : ToolItemData
 {
 	public Item.StackType stackType = Item.StackType.Durability;
 

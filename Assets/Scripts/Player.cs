@@ -7,9 +7,13 @@ using UnityEngine.InputSystem;
 public class Player : Singleton<Player>
 {
 	private Rigidbody rb;
-	private List<FarmField> allFarmFields = new List<FarmField>();
-	private List<FarmField> closeFarmFields = new List<FarmField>();
-	public FarmField closestFarmField;
+	// private List<FarmField> allFarmFields = new List<FarmField>();
+	private List<IPointOfInterest> closePointOfInterests = new List<IPointOfInterest>();
+	public IPointOfInterest closestPointOfInterest;
+	private IPointOfInterest lastClosestPointOfInterest;
+
+	// private List<FarmField> closeFarmFields = new List<FarmField>();
+	// public FarmField closestFarmField;
 	private InputManager inputManager;
 
 	public GameObject playerDebugObject;
@@ -17,6 +21,8 @@ public class Player : Singleton<Player>
 	public MainInventory mainInventory;
 	public HotbarInventory hotbarInventory;
 	public HotbarToolbar hotbarToolbar;
+
+	public PlayerController.HoldInteractInputState holdInteractInputState = PlayerController.HoldInteractInputState.Canceled;
 
 	private void OnEnable()
 	{
@@ -30,18 +36,23 @@ public class Player : Singleton<Player>
 		hotbarInventory = HotbarInventory.Instance;
 		hotbarToolbar = HotbarToolbar.Instance;
 
-		allFarmFields.AddRange(FindObjectsOfType<FarmField>(true));
+		// allFarmFields.AddRange(FindObjectsOfType<FarmField>(true));
 	}
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.CompareTag("FarmField"))
+		if (other.CompareTag("Interactable"))
 		{
-			FarmField farmField = other.GetComponent<FarmField>();
-			// Debug.Log("Farm entered");
-			if (!closeFarmFields.Contains(farmField))
+			// FarmField farmField = other.GetComponent<FarmField>();
+			// // Debug.Log("Farm entered");
+			// if (!closeFarmFields.Contains(farmField))
+			// {
+			// 	closeFarmFields.Add(farmField);
+			// }
+			IPointOfInterest pointOfInterest = other.GetComponent<IPointOfInterest>();
+			if (!closePointOfInterests.Contains(pointOfInterest))
 			{
-				closeFarmFields.Add(farmField);
+				closePointOfInterests.Add(pointOfInterest);
 			}
 		}
 	}
@@ -62,12 +73,18 @@ public class Player : Singleton<Player>
 
 	void OnTriggerExit(Collider other)
 	{
-		if (other.CompareTag("FarmField"))
+		if (other.CompareTag("Interactable"))
 		{
-			FarmField farmField = other.GetComponent<FarmField>();
-			if (closeFarmFields.Contains(farmField))
+			// FarmField farmField = other.GetComponent<FarmField>();
+			// if (closeFarmFields.Contains(farmField))
+			// {
+			// 	closeFarmFields.Remove(farmField);
+			// }
+			IPointOfInterest pointOfInterest = other.GetComponent<IPointOfInterest>();
+			pointOfInterest.ActivateHighlight(false);
+			if (closePointOfInterests.Contains(pointOfInterest))
 			{
-				closeFarmFields.Remove(farmField);
+				closePointOfInterests.Remove(pointOfInterest);
 			}
 		}
 		else if (other.CompareTag("FarmPushSolid"))
@@ -84,20 +101,59 @@ public class Player : Singleton<Player>
 		}
 	}
 
-	public void TapInteract(InputAction.CallbackContext context)
+	public void TapInteractInput(InputAction.CallbackContext context)
 	{
 		// if (closestFarmField != null)
 		// {
 		Debug.Log("Tap Interact!");
+		// InteractWithPointOfInterest(IPointOfInterest.InputType.Tap);
 		// }
 	}
 
-	public void HoldInteract(InputAction.CallbackContext context)
+	public void HoldInteractInputStarted(InputAction.CallbackContext context)
 	{
-		Debug.Log("Hold Interact!");
+		Debug.Log("Hold Interact Started!");
+		holdInteractInputState = PlayerController.HoldInteractInputState.Started;
+		if (closestPointOfInterest != null && closestPointOfInterest is IInteractable)
+		{
+			if ((closestPointOfInterest as IInteractable).Interact(IPointOfInterest.InputType.Hold, true))
+			{
+				Utils.CreateWorldTextPopup("Hold Interact Started!", playerDebugObject.transform, Vector3.one * 0.2f);
+				// TODO: 	Start the action here (animations, progress bar, etc.)
+				// TODO: 	Also stop the movement of the player until it is canceled
+			}
+			else
+			{
+				GetComponent<PlayerController>().DisallowHoldInteractInput();
+				// TODO: 	holdInteractInputState = PlayerController.HoldInteractInputState.Canceled;
+			}
+		}
+
+
 	}
 
-	public void TapUse(InputAction.CallbackContext context)
+	public void HoldInteractInputPerformed(InputAction.CallbackContext context)
+	{
+		Debug.Log("Hold Interact Performed!");
+		holdInteractInputState = PlayerController.HoldInteractInputState.Performed;
+		if (closestPointOfInterest != null && closestPointOfInterest is IInteractable)
+		{
+			InteractWithPointOfInterest(IPointOfInterest.InputType.Hold);
+			Utils.CreateWorldTextPopup("Hold Interact Performed!", playerDebugObject.transform, Vector3.one * 0.2f);
+			// TODO: Finish the action (animations, give the item, etc.)
+		}
+	}
+
+	public void HoldInteractInputCanceled(InputAction.CallbackContext context)
+	{
+		Debug.Log("Hold Interact Canceled!");
+		Utils.CreateWorldTextPopup("Hold Interact Canceled!", playerDebugObject.transform, Vector3.one * 0.2f);
+		// TODO: Cancel the action here (animations, progress bar, etc.)
+		// TODO: Resume the movement of the player
+		holdInteractInputState = PlayerController.HoldInteractInputState.Canceled;
+	}
+
+	public void TapUseInput(InputAction.CallbackContext context)
 	{
 		Debug.Log("Tap Use!");
 		Action<Item> useItemFunction = (Item item) => { };
@@ -109,55 +165,57 @@ public class Player : Singleton<Player>
 		}
 	}
 
-	public void HoldUse(InputAction.CallbackContext context)
+	public void HoldUseInput(InputAction.CallbackContext context)
 	{
 		Debug.Log("Hold Use!");
 	}
 
 	public void PlantSeed(Item item, ref bool success)
 	{
-		if (closestFarmField == null)
+		if (closestPointOfInterest is not FarmField)
 		{
 			Utils.CreateWorldTextPopup("No farm\nfield nearby!", playerDebugObject.transform, null, Color.red);
 			success = false;
 			return;
 		}
-		else if (closestFarmField.farmState != FarmField.FarmState.Empty)
+		else if ((closestPointOfInterest as FarmField).farmState != FarmField.FarmState.Empty)
 		{
-			Utils.CreateWorldTextPopup("Farm field is\nnot empty!", playerDebugObject.transform, null, Color.red);
+			Utils.CreateWorldTextPopup($"Farm field:\n{(closestPointOfInterest as FarmField).farmState.ToString()}!", playerDebugObject.transform, null, Color.red);
 			success = false;
 			return;
 		}
-		closestFarmField.PlantSeed(item);
+		(closestPointOfInterest as FarmField).UseItemOnThis(item);
+	}
+
+	public void InteractWithPointOfInterest(IPointOfInterest.InputType interactionType, bool _checking = false)
+	{
+		(closestPointOfInterest as IInteractable).Interact(interactionType);
 	}
 
 	private void Update()
 	{
-		if (closeFarmFields.Count > 0)
+		if (closestPointOfInterest != null)
 		{
-			closestFarmField = closeFarmFields[0];
-			foreach (FarmField farmField in closeFarmFields)
+			lastClosestPointOfInterest = closestPointOfInterest;
+		}
+		if (closePointOfInterests.Count > 0)
+		{
+			closestPointOfInterest = closePointOfInterests[0];
+			foreach (IPointOfInterest pointOfInterest in closePointOfInterests)
 			{
-				if (Vector3.Distance(transform.position, farmField.transform.position) < Vector3.Distance(transform.position, closestFarmField.transform.position))
+				if (Vector3.Distance(transform.position, pointOfInterest.GetGameObject().transform.position) < Vector3.Distance(transform.position, closestPointOfInterest.GetGameObject().transform.position))
 				{
-					closestFarmField = farmField;
+					closestPointOfInterest = pointOfInterest;
 				}
 			}
 		}
 		else
 		{
-			closestFarmField = null;
+			closestPointOfInterest = null;
 		}
 
-		foreach (FarmField farmField in allFarmFields)
-		{
-			farmField.ActivateHighlight(false);
-		}
-		if (closestFarmField)
-		{
-
-			closestFarmField.ActivateHighlight(true);
-		}
+		lastClosestPointOfInterest?.ActivateHighlight(false);
+		closestPointOfInterest?.ActivateHighlight(true);
 	}
 
 	private void FixedUpdate()

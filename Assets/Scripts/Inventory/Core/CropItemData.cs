@@ -6,6 +6,7 @@ using System;
 [CreateAssetMenu(fileName = "CropItemData", menuName = "ScriptableObjects/CropItemData", order = 1)]
 public class CropItemData : BaseItemData
 {
+	[ReadOnly]
 	public Item.ItemType itemType = Item.ItemType.Crop;
 	public Item.StackType stackType = Item.StackType.Stackable;
 

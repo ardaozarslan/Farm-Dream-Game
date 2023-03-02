@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 9004139372007006383}
   m_Layer: 0
   m_Name: FarmField
-  m_TagString: FarmField
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -292,6 +292,7 @@ MonoBehaviour:
   farmPushTriggerCollider: {fileID: 3453131788379423577}
   farmPushSolidCollider: {fileID: 5557766033719877309}
   plant: {fileID: 0}
+  farmState: 0
 --- !u!65 &4777949589333954666
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [CreateAssetMenu(fileName = "PickaxeToolItemData", menuName = "ScriptableObjects/Tools/PickaxeToolItemData", order = 1)]
-public class PickaxeToolItemData : BaseItemData
+public class PickaxeToolItemData : ToolItemData
 {
 	public Item.StackType stackType = Item.StackType.Durability;
 

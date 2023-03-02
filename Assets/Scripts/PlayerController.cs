@@ -11,6 +11,13 @@ public class PlayerController : MonoBehaviour
 	private Player player;
 	private InputManager inputManager;
 
+	public enum HoldInteractInputState
+	{
+		Started,
+		Performed,
+		Canceled
+	}
+
 	private void OnEnable()
 	{
 		rb = GetComponent<Rigidbody>();
@@ -22,7 +29,7 @@ public class PlayerController : MonoBehaviour
 		inputManager = InputManager.Instance;
 		inputManager.playerInputActions.Player.Jump.performed += Jump;
 		inputManager.playerInputActions.Player.TapInteract.performed += TapInteract;
-		inputManager.playerInputActions.Player.HoldInteract.performed += HoldInteract;
+		inputManager.playerInputActions.Player.HoldInteract.started += HoldInteractStarted;
 		inputManager.playerInputActions.Player.TapUse.performed += TapUse;
 		inputManager.playerInputActions.Player.HoldUse.performed += HoldUse;
 		inputManager.playerInputActions.Player.Inventory.performed += Inventory;
@@ -43,7 +50,9 @@ public class PlayerController : MonoBehaviour
 	{
 		inputManager.playerInputActions.Player.Jump.performed -= Jump;
 		inputManager.playerInputActions.Player.TapInteract.performed -= TapInteract;
-		inputManager.playerInputActions.Player.HoldInteract.performed -= HoldInteract;
+		inputManager.playerInputActions.Player.HoldInteract.started -= HoldInteractStarted;
+		inputManager.playerInputActions.Player.HoldInteract.performed -= HoldInteractPerformed;
+		inputManager.playerInputActions.Player.HoldInteract.canceled -= HoldInteractCanceled;
 		inputManager.playerInputActions.Player.TapUse.performed -= TapUse;
 		inputManager.playerInputActions.Player.HoldUse.performed -= HoldUse;
 		inputManager.playerInputActions.Player.Inventory.performed -= Inventory;
@@ -68,25 +77,43 @@ public class PlayerController : MonoBehaviour
 	private void TapInteract(InputAction.CallbackContext context)
 	{
 		// Debug.Log("Tap Interact!");
-		player.TapInteract(context);
+		player.TapInteractInput(context);
 	}
 
-	private void HoldInteract(InputAction.CallbackContext context)
+	private void HoldInteractStarted(InputAction.CallbackContext context)
 	{
-		// Debug.Log("Hold Interact!");
-		player.HoldInteract(context);
+		inputManager.playerInputActions.Player.HoldInteract.performed += HoldInteractPerformed;
+		inputManager.playerInputActions.Player.HoldInteract.canceled += HoldInteractCanceled;
+		player.HoldInteractInputStarted(context);
+	}
+
+	private void HoldInteractPerformed(InputAction.CallbackContext context)
+	{
+		inputManager.playerInputActions.Player.HoldInteract.canceled -= HoldInteractCanceled;
+		player.HoldInteractInputPerformed(context);
+	}
+
+	private void HoldInteractCanceled(InputAction.CallbackContext context)
+	{
+		player.HoldInteractInputCanceled(context);
+	}
+
+	public void DisallowHoldInteractInput()
+	{
+		inputManager.playerInputActions.Player.HoldInteract.performed -= HoldInteractPerformed;
+		inputManager.playerInputActions.Player.HoldInteract.canceled -= HoldInteractCanceled;
 	}
 
 	private void TapUse(InputAction.CallbackContext context)
 	{
 		// Debug.Log("Tap Use!");
-		player.TapUse(context);
+		player.TapUseInput(context);
 	}
 
 	private void HoldUse(InputAction.CallbackContext context)
 	{
 		// Debug.Log("Hold Use!");
-		player.HoldUse(context);
+		player.HoldUseInput(context);
 	}
 
 	private void Inventory(InputAction.CallbackContext context)

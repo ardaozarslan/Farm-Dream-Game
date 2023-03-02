@@ -14,6 +14,7 @@ public class Plant : MonoBehaviour
 		farmField.plant = this;
 		seedItem = _seedItem;
 
+
 		foreach (GameObject child in plantScaleModels)
 		{
 			child.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);

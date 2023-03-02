@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [CreateAssetMenu(fileName = "RakeToolItemData", menuName = "ScriptableObjects/Tools/RakeToolItemData", order = 1)]
-public class RakeToolItemData : BaseItemData
+public class RakeToolItemData : ToolItemData
 {
 	public Item.StackType stackType = Item.StackType.Durability;
 

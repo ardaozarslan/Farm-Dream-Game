@@ -6,6 +6,7 @@ using System;
 [CreateAssetMenu(fileName = "SeedItemData", menuName = "ScriptableObjects/SeedItemData", order = 1)]
 public class SeedItemData : BaseItemData
 {
+	[ReadOnly]
 	public Item.ItemType itemType = Item.ItemType.Seed;
 	public Item.StackType stackType = Item.StackType.Stackable;
 

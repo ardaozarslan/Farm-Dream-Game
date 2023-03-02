@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [CreateAssetMenu(fileName = "HoeToolItemData", menuName = "ScriptableObjects/Tools/HoeToolItemData", order = 1)]
-public class HoeToolItemData : BaseItemData
+public class HoeToolItemData : ToolItemData
 {
 	public Item.StackType stackType = Item.StackType.Durability;
 

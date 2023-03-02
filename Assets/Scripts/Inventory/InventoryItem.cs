@@ -18,6 +18,7 @@ public class InventoryItem : MonoBehaviour
 		private set { this.isDraggable = value; }
 	}
 
+	[SerializeField, ReadOnly]
 	private Item item;
 	public Item Item
 	{
@@ -63,6 +64,10 @@ public class InventoryItem : MonoBehaviour
 		else if (inventoryCell.CellType == InventoryCell.cellType.MainInventory)
 		{
 			isDraggable = true;
+		}
+		else if (inventoryCell.CellType == InventoryCell.cellType.HotbarToolbar)
+		{
+			isDraggable = false;
 		}
 	}
 
