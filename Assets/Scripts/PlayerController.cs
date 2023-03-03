@@ -151,6 +151,8 @@ public class PlayerController : MonoBehaviour
 
 	private void Movement()
 	{
+		if (!player.allowMovementInput) return;
+		
 		Vector2 inputVector = inputManager.playerInputActions.Player.Movement.ReadValue<Vector2>();
 		float speed = 10f;
 		float newVelocityX = Mathf.Lerp(rb.velocity.x, inputVector.x * speed, 10f * Time.deltaTime);

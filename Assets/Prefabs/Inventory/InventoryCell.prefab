@@ -107,15 +107,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 27
-    m_Right: 27
-    m_Top: 27
-    m_Bottom: 27
+    m_Left: 15
+    m_Right: 15
+    m_Top: 15
+    m_Bottom: 15
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 84.375, y: 84.375}
-  m_Spacing: {x: 11.25, y: 11.25}
+  m_CellSize: {x: 80, y: 80}
+  m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 1
   paddingSizerFallback:
@@ -156,7 +156,43 @@ MonoBehaviour:
       - Mode: 1
         Impact: 1
   customPaddingSizers:
-    items: []
+    items:
+    - screenConfigName: Landscape
+      OptimizedSize:
+        left: 15
+        right: 15
+        top: 15
+        bottom: 15
+      MinSize:
+        left: 0
+        right: 0
+        top: 0
+        bottom: 0
+      MaxSize:
+        left: 1000
+        right: 1000
+        top: 1000
+        bottom: 1000
+      ModLeft:
+        ExponentialScale: 1
+        SizeModifiers:
+        - Mode: 1
+          Impact: 1
+      ModRight:
+        ExponentialScale: 1
+        SizeModifiers:
+        - Mode: 1
+          Impact: 1
+      ModTop:
+        ExponentialScale: 1
+        SizeModifiers:
+        - Mode: 1
+          Impact: 1
+      ModBottom:
+        ExponentialScale: 1
+        SizeModifiers:
+        - Mode: 1
+          Impact: 1
   cellSizerFallback:
     screenConfigName: 
     OptimizedSize: {x: 150, y: 150}
@@ -173,7 +209,17 @@ MonoBehaviour:
       - Mode: 0
         Impact: 1
   customCellSizers:
-    items: []
+    items:
+    - screenConfigName: Landscape
+      OptimizedSize: {x: 80, y: 80}
+      MinSize: {x: 80, y: 80}
+      MaxSize: {x: 80, y: 80}
+      ModX:
+        ExponentialScale: 1
+        SizeModifiers: []
+      ModY:
+        ExponentialScale: 1
+        SizeModifiers: []
   spacingSizerFallback:
     screenConfigName: 
     OptimizedSize: {x: 20, y: 20}
@@ -190,7 +236,21 @@ MonoBehaviour:
       - Mode: 0
         Impact: 1
   customSpacingSizers:
-    items: []
+    items:
+    - screenConfigName: Landscape
+      OptimizedSize: {x: 20, y: 20}
+      MinSize: {x: 0, y: 0}
+      MaxSize: {x: 300, y: 300}
+      ModX:
+        ExponentialScale: 1
+        SizeModifiers:
+        - Mode: 0
+          Impact: 1
+      ModY:
+        ExponentialScale: 1
+        SizeModifiers:
+        - Mode: 0
+          Impact: 1
   settingsFallback:
     Constraint: 1
     ConstraintCount: 1
@@ -200,5 +260,12 @@ MonoBehaviour:
     Fit: 0
     screenConfigName: Fallback
   customSettings:
-    items: []
+    items:
+    - Constraint: 1
+      ConstraintCount: 1
+      ChildAlignment: 4
+      StartAxis: 0
+      StartCorner: 0
+      Fit: 0
+      screenConfigName: Landscape
   fit: 0

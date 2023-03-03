@@ -33,6 +33,9 @@ public class MainInventory : Singleton<MainInventory>
 	public bool AddItem(Item item)
 	{
 		int count = item.stackSize;
+		if (count == 0) {
+			return false;
+		}
 		// Find an existing stack for the item
 		for (int index = 0; index < inventoryCells.Count; index++)
 		{
@@ -44,10 +47,11 @@ public class MainInventory : Singleton<MainInventory>
 				int space = item.maxStackSize - inventoryCell.InventoryItem.Item.stackSize;
 				int addCount = Mathf.Min(count, space);
 				// Debug.Log("adding count: " + addCount);
-				inventoryCell.InventoryItem.UpdateStackSize(inventoryCell.InventoryItem.Item.stackSize + addCount);
+				inventoryCell.InventoryItem.UpdateStackSizeWithoutCall(inventoryCell.InventoryItem.Item.stackSize + addCount);
 				count -= addCount;
 				if (count == 0)
 				{
+					inventoryManager.InventoryCellChangeCall(inventoryCell);
 					return true;
 				}
 			}
@@ -65,18 +69,19 @@ public class MainInventory : Singleton<MainInventory>
 				InventoryItem inventoryItem = inventoryItemObject.GetComponent<InventoryItem>();
 				inventoryItem.Item = new Item(item, addCount);
 				inventoryItem.InitializeCell(inventoryCell);
+				Debug.Log("add item: " + item.name + " at index: " + index + " with stack size: " + addCount + " where the inventory cell's index is " + inventoryCell.Index);
 				// WARNING: this line gives errors sometimes when I try to harvest a plant!
-				inventoryCell.InventoryItem.UpdateStackSize(addCount);
+				inventoryCell.InventoryItem.UpdateStackSizeWithoutCall(addCount);
 				count -= addCount;
 				// Debug.Log("Added item: " + item.name + " at index: " + index + " with stack size: " + inventoryCell.InventoryItem.Item.stackSize);
 				if (count == 0)
 				{
+					inventoryManager.InventoryCellChangeCall(inventoryCell);
 					return true;
 				}
 			}
 		}
 		// hotbarInventory.AddItem(item);
-
 		return false;
 	}
 

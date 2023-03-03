@@ -25,6 +25,7 @@ public class Player : Singleton<Player>
 	public PlayerController.HoldInteractInputState holdInteractInputState = PlayerController.HoldInteractInputState.Canceled;
 
 	public PlayerInteractionCollider playerInteractionCollider;
+	public bool allowMovementInput = true;
 
 	private void OnEnable()
 	{
@@ -115,6 +116,8 @@ public class Player : Singleton<Player>
 				Utils.CreateWorldTextPopup("Hold Interact Started!", playerDebugObject.transform, Vector3.one * 0.2f);
 				// TODO: 	Start the action here (animations, progress bar, etc.)
 				// TODO: 	Also stop the movement of the player until it is canceled
+				allowMovementInput = false;
+				rb.velocity = Vector3.zero;
 			}
 			else
 			{
@@ -135,6 +138,7 @@ public class Player : Singleton<Player>
 			Utils.CreateWorldTextPopup("Hold Interact Performed!", playerDebugObject.transform, Vector3.one * 0.2f);
 			(closestPointOfInterest as IInteractable).Interact(IPointOfInterest.InputType.Hold);
 			// TODO: Finish the action (animations, give the item, etc.)
+			allowMovementInput = true;
 		}
 	}
 
@@ -145,6 +149,7 @@ public class Player : Singleton<Player>
 		// TODO: Cancel the action here (animations, progress bar, etc.)
 		// TODO: Resume the movement of the player
 		holdInteractInputState = PlayerController.HoldInteractInputState.Canceled;
+		allowMovementInput = true;
 	}
 
 	public void TapUseInput(InputAction.CallbackContext context)

@@ -97,8 +97,8 @@ MonoBehaviour:
   m_fontSizeBase: 33.75
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
-  m_fontSizeMax: 33.75
+  m_fontSizeMin: 32
+  m_fontSizeMax: 60
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -174,7 +174,43 @@ MonoBehaviour:
       - Mode: 1
         Impact: 1
   customMarginSizers:
-    items: []
+    items:
+    - screenConfigName: Landscape
+      OptimizedSize:
+        left: 0
+        right: 0
+        top: 0
+        bottom: 0
+      MinSize:
+        left: 0
+        right: 0
+        top: 0
+        bottom: 0
+      MaxSize:
+        left: 1000
+        right: 1000
+        top: 1000
+        bottom: 1000
+      ModLeft:
+        ExponentialScale: 1
+        SizeModifiers:
+        - Mode: 1
+          Impact: 1
+      ModRight:
+        ExponentialScale: 1
+        SizeModifiers:
+        - Mode: 1
+          Impact: 1
+      ModTop:
+        ExponentialScale: 1
+        SizeModifiers:
+        - Mode: 1
+          Impact: 1
+      ModBottom:
+        ExponentialScale: 1
+        SizeModifiers:
+        - Mode: 1
+          Impact: 1
   fontSizerFallback:
     screenConfigName: 
     OptimizedSize: 60
@@ -186,7 +222,16 @@ MonoBehaviour:
       - Mode: 0
         Impact: 1
   customFontSizers:
-    items: []
+    items:
+    - screenConfigName: Landscape
+      OptimizedSize: 60
+      MinSize: 10
+      MaxSize: 500
+      Mod:
+        ExponentialScale: 1
+        SizeModifiers:
+        - Mode: 0
+          Impact: 1
   minFontSizerFallback:
     screenConfigName: 
     OptimizedSize: 32
@@ -198,7 +243,16 @@ MonoBehaviour:
       - Mode: 0
         Impact: 1
   customMinFontSizers:
-    items: []
+    items:
+    - screenConfigName: Landscape
+      OptimizedSize: 32
+      MinSize: 10
+      MaxSize: 500
+      Mod:
+        ExponentialScale: 1
+        SizeModifiers:
+        - Mode: 0
+          Impact: 1
   maxFontSizerFallback:
     screenConfigName: 
     OptimizedSize: 128
@@ -318,6 +372,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemImage: {fileID: 4795163080706085690}
   itemStackSizeText: {fileID: 838562825476053478}
+  item:
+    name: 
+    id: 
+    itemType: 0
+    description: 
+    sprite: {fileID: 0}
+    stackSize: 0
+    maxStackSize: 0
+    stackType: 0
 --- !u!114 &6709599513644076898
 MonoBehaviour:
   m_ObjectHideFlags: 0
