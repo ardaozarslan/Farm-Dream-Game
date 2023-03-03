@@ -16,11 +16,6 @@ public class BaseItemData : ScriptableObject
 	public int maxStackSize;
 	private Item.StackType _stackType = Item.StackType.None;
 
-	public virtual GameObject GetPlantPrefab() { return null; }
-	public virtual float GetGrowTime() { return 0f; }
-	public virtual float GetGrowTimeVariance() { return 0f; }
-	public virtual float GetGrowScale() { return 1f; }
-	public virtual float GetGrowScaleVariance() { return 0f; }
 	public virtual Item.ItemType GetItemType() { return _itemType; }
 	public virtual Item.StackType GetStackType() { return _stackType; }
 

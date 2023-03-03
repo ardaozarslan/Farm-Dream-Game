@@ -85,6 +85,7 @@ public static class Utils
 		textParentObject.transform.position = startPosition;
 		textParentObject.transform.SetParent(parent, true);
 		textParentObject.transform.RotateAround(textParentObject.transform.position, Vector3.right, Camera.main.transform.rotation.eulerAngles.x);
+		// textParentObject.transform.rotation.eulerAngles.Set(textParentObject.transform.rotation.eulerAngles.y, 0, 0);
 
 		Vector3 finalPopupLocalToDummyPosition = textParentObject.transform.localPosition + Vector3.up * riseAmount;
 		Vector3 finalPopupWorldPosition = textParentObject.transform.TransformPoint(finalPopupLocalToDummyPosition);

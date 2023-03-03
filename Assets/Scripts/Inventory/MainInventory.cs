@@ -65,6 +65,7 @@ public class MainInventory : Singleton<MainInventory>
 				InventoryItem inventoryItem = inventoryItemObject.GetComponent<InventoryItem>();
 				inventoryItem.Item = new Item(item, addCount);
 				inventoryItem.InitializeCell(inventoryCell);
+				// WARNING: this line gives errors sometimes when I try to harvest a plant!
 				inventoryCell.InventoryItem.UpdateStackSize(addCount);
 				count -= addCount;
 				// Debug.Log("Added item: " + item.name + " at index: " + index + " with stack size: " + inventoryCell.InventoryItem.Item.stackSize);

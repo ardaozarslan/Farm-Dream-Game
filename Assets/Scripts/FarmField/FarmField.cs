@@ -11,6 +11,7 @@ public class FarmField : MonoBehaviour, IInteractable, IItemUsable
 	public Collider farmPushSolidCollider;
 	public Plant plant;
 	public FarmState farmState = FarmState.Empty;
+	public List<FarmAttentionType> farmAttentions = new List<FarmAttentionType>();
 
 	public enum FarmState
 	{
@@ -18,12 +19,49 @@ public class FarmField : MonoBehaviour, IInteractable, IItemUsable
 		Planted = 10,
 		Growing = 20,
 		ReadyToHarvest = 30,
-		NeedsWater = 40,
-		NeedsWeed = 50,
-		NeedsRake = 60,
+		NeedsAttention = 40,
+		// NeedsWater = 40,
+		// NeedsWeed = 50,
+		// NeedsRake = 60,
+	}
+
+	public enum FarmAttentionType
+	{
+		Water = 10,
+		Weed = 20,
+		Rake = 30,
 	}
 
 	public GameObject GetGameObject() => gameObject;
+
+	public void AddAttention(FarmAttentionType _farmAttentionType)
+	{
+		if (!farmAttentions.Contains(_farmAttentionType))
+		{
+			farmAttentions.Add(_farmAttentionType);
+		}
+	}
+
+	public void AddAttention(List<FarmAttentionType> _farmAttentionTypes)
+	{
+		foreach (FarmAttentionType farmAttentionType in _farmAttentionTypes)
+		{
+			AddAttention(farmAttentionType);
+		}
+	}
+
+	public void RemoveAttention(FarmAttentionType _farmAttentionType)
+	{
+		if (farmAttentions.Contains(_farmAttentionType))
+		{
+			farmAttentions.Remove(_farmAttentionType);
+		}
+	}
+
+	public void ClearAttention()
+	{
+		farmAttentions.Clear();
+	}
 
 	public bool Interact(IPointOfInterest.InputType type, bool _isCheckOnly = false)
 	{
@@ -109,7 +147,7 @@ public class FarmField : MonoBehaviour, IInteractable, IItemUsable
 
 	public void PlantSeed(Item seedItem)
 	{
-		GameObject plantPrefab = seedItem.ItemData.GetPlantPrefab();
+		GameObject plantPrefab = (seedItem.ItemData as SeedItemData).GetPlantPrefab();
 		if (plantPrefab == null) return;
 		farmState = FarmState.Planted;
 		plant = Instantiate(plantPrefab, transform.position, Quaternion.identity, transform).GetComponent<Plant>();
@@ -120,7 +158,10 @@ public class FarmField : MonoBehaviour, IInteractable, IItemUsable
 
 	public void HarvestPlant()
 	{
-		Utils.CreateWorldTextPopup($"Harvest here!", transform, null, Color.white);
+		Utils.CreateWorldTextPopup($"Harvested!", transform, null, Color.white);
+		if (plant == null) return;
+		plant.Harvest();
+		DisablePushColliders();
 	}
 
 	public void EnablePushColliders()
@@ -135,7 +176,7 @@ public class FarmField : MonoBehaviour, IInteractable, IItemUsable
 		}
 		else
 		{
-			farmPushSolidCollider.isTrigger = false;
+			// farmPushSolidCollider.isTrigger = false;
 			farmPushTriggerCollider.enabled = false;
 		}
 	}

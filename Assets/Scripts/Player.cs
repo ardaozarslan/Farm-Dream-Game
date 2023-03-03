@@ -24,6 +24,8 @@ public class Player : Singleton<Player>
 
 	public PlayerController.HoldInteractInputState holdInteractInputState = PlayerController.HoldInteractInputState.Canceled;
 
+	public PlayerInteractionCollider playerInteractionCollider;
+
 	private void OnEnable()
 	{
 		rb = GetComponent<Rigidbody>();
@@ -36,25 +38,31 @@ public class Player : Singleton<Player>
 		hotbarInventory = HotbarInventory.Instance;
 		hotbarToolbar = HotbarToolbar.Instance;
 
+		playerInteractionCollider = GetComponentInChildren<PlayerInteractionCollider>();
+
 		// allFarmFields.AddRange(FindObjectsOfType<FarmField>(true));
+	}
+
+	public void AddPointOfInterest(IPointOfInterest pointOfInterest)
+	{
+		if (!closePointOfInterests.Contains(pointOfInterest))
+		{
+			closePointOfInterests.Add(pointOfInterest);
+		}
+	}
+
+	public void RemovePointOfInterest(IPointOfInterest pointOfInterest)
+	{
+		pointOfInterest.ActivateHighlight(false);
+		if (closePointOfInterests.Contains(pointOfInterest))
+		{
+			closePointOfInterests.Remove(pointOfInterest);
+		}
 	}
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.CompareTag("Interactable"))
-		{
-			// FarmField farmField = other.GetComponent<FarmField>();
-			// // Debug.Log("Farm entered");
-			// if (!closeFarmFields.Contains(farmField))
-			// {
-			// 	closeFarmFields.Add(farmField);
-			// }
-			IPointOfInterest pointOfInterest = other.GetComponent<IPointOfInterest>();
-			if (!closePointOfInterests.Contains(pointOfInterest))
-			{
-				closePointOfInterests.Add(pointOfInterest);
-			}
-		}
+
 	}
 
 	private void OnTriggerStay(Collider other)
@@ -73,21 +81,7 @@ public class Player : Singleton<Player>
 
 	void OnTriggerExit(Collider other)
 	{
-		if (other.CompareTag("Interactable"))
-		{
-			// FarmField farmField = other.GetComponent<FarmField>();
-			// if (closeFarmFields.Contains(farmField))
-			// {
-			// 	closeFarmFields.Remove(farmField);
-			// }
-			IPointOfInterest pointOfInterest = other.GetComponent<IPointOfInterest>();
-			pointOfInterest.ActivateHighlight(false);
-			if (closePointOfInterests.Contains(pointOfInterest))
-			{
-				closePointOfInterests.Remove(pointOfInterest);
-			}
-		}
-		else if (other.CompareTag("FarmPushSolid"))
+		if (other.CompareTag("FarmPushSolid"))
 		{
 			other.isTrigger = false;
 			// other.GetComponentInParent<FarmField>().farmPushTriggerCollider.enabled = false;
@@ -138,8 +132,8 @@ public class Player : Singleton<Player>
 		holdInteractInputState = PlayerController.HoldInteractInputState.Performed;
 		if (closestPointOfInterest != null && closestPointOfInterest is IInteractable)
 		{
-			InteractWithPointOfInterest(IPointOfInterest.InputType.Hold);
 			Utils.CreateWorldTextPopup("Hold Interact Performed!", playerDebugObject.transform, Vector3.one * 0.2f);
+			(closestPointOfInterest as IInteractable).Interact(IPointOfInterest.InputType.Hold);
 			// TODO: Finish the action (animations, give the item, etc.)
 		}
 	}
@@ -187,10 +181,6 @@ public class Player : Singleton<Player>
 		(closestPointOfInterest as FarmField).UseItemOnThis(item);
 	}
 
-	public void InteractWithPointOfInterest(IPointOfInterest.InputType interactionType, bool _checking = false)
-	{
-		(closestPointOfInterest as IInteractable).Interact(interactionType);
-	}
 
 	private void Update()
 	{
@@ -203,7 +193,7 @@ public class Player : Singleton<Player>
 			closestPointOfInterest = closePointOfInterests[0];
 			foreach (IPointOfInterest pointOfInterest in closePointOfInterests)
 			{
-				if (Vector3.Distance(transform.position, pointOfInterest.GetGameObject().transform.position) < Vector3.Distance(transform.position, closestPointOfInterest.GetGameObject().transform.position))
+				if (Vector3.Distance(playerInteractionCollider.transform.position, pointOfInterest.GetGameObject().transform.position) < Vector3.Distance(playerInteractionCollider.transform.position, closestPointOfInterest.GetGameObject().transform.position))
 				{
 					closestPointOfInterest = pointOfInterest;
 				}

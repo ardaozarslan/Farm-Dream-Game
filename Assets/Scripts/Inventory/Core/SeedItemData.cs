@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using GD.MinMaxSlider;
 
 [CreateAssetMenu(fileName = "SeedItemData", menuName = "ScriptableObjects/SeedItemData", order = 1)]
 public class SeedItemData : BaseItemData
@@ -25,16 +26,28 @@ public class SeedItemData : BaseItemData
 	[Range(1, 10)]
 	[Tooltip("How many seeds are used to plant")]
 	public int useCount = 1;
+	[MinMaxSlider(0, 10)]
+	[Tooltip("How many items are harvested from the plant")]
+	public Vector2Int harvestAmound = new Vector2Int(1, 3);
+	[MinMaxSlider(0, 10)]
+	[Tooltip("How many seeds are returned from the plant")]
+	public Vector2Int returnSeedAmount = new Vector2Int(0, 1);
+
+	public CropItemData harvestItemData;
 
 	public GameObject plantPrefab;
 
 	public override Item.ItemType GetItemType() { return itemType; }
 	public override Item.StackType GetStackType() { return stackType; }
-	public override GameObject GetPlantPrefab() { return plantPrefab; }
-	public override float GetGrowTime() { return growTime; }
-	public override float GetGrowTimeVariance() { return growTimeVariance; }
-	public override float GetGrowScale() { return growScale; }
-	public override float GetGrowScaleVariance() { return growScaleVariance; }
+	public GameObject GetPlantPrefab() { return plantPrefab; }
+	public float GetGrowTime() { return growTime; }
+	public float GetGrowTimeVariance() { return growTimeVariance; }
+	public float GetGrowScale() { return growScale; }
+	public float GetGrowScaleVariance() { return growScaleVariance; }
+	
+	public CropItemData GetHarvestItemData() { return harvestItemData; }
+	public Vector2Int GetHarvestAmount() { return harvestAmound; }
+	public Vector2Int GetReturnSeedAmount() { return returnSeedAmount; }
 
 
 	public override void OnUse(Item item = null)

@@ -14,8 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Wheat Seeds
   id: 100
-  itemType: 300
   description: Wheat seeds
   sprite: {fileID: 21300000, guid: fe9ee1ea60607484ebe217db460135ed, type: 3}
   maxStackSize: 64
+  itemType: 300
   stackType: 100
+  growTime: 10
+  growTimeVariance: 1
+  growScale: 1
+  growScaleVariance: 0.1
+  useCount: 1
+  harvestCount: {x: 1, y: 3}
+  returnSeedCount: {x: 0, y: 1}
+  harvestItemData: {fileID: 11400000, guid: 5bb54911efc97d448a36b392fb1f18a5, type: 2}
+  plantPrefab: {fileID: 0}
