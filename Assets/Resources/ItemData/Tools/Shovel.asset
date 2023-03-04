@@ -17,4 +17,6 @@ MonoBehaviour:
   description: Shovel tool
   sprite: {fileID: 21300000, guid: e69efd03e1b93014b80daeb626b9d720, type: 3}
   maxStackSize: 1
+  maxDurability: 256
+  itemType: 100
   stackType: 200

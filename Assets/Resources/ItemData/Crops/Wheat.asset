@@ -17,5 +17,6 @@ MonoBehaviour:
   description: Cropped wheat
   sprite: {fileID: 21300000, guid: d8e52b470146c1442b4673e2583c29be, type: 3}
   maxStackSize: 64
+  maxDurability: 256
   itemType: 200
   stackType: 100

@@ -17,4 +17,6 @@ MonoBehaviour:
   description: Pickaxe tool
   sprite: {fileID: 21300000, guid: 89f7c575b308bd3469ec5085564aee8e, type: 3}
   maxStackSize: 1
+  maxDurability: 256
+  itemType: 100
   stackType: 200

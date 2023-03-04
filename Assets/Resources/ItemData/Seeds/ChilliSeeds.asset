@@ -17,6 +17,7 @@ MonoBehaviour:
   description: Chilli seeds
   sprite: {fileID: 21300000, guid: 13579d5fffa65a24f8140e965b04f0b2, type: 3}
   maxStackSize: 64
+  maxDurability: 256
   itemType: 300
   stackType: 100
   growTime: 10
@@ -24,7 +25,7 @@ MonoBehaviour:
   growScale: 1
   growScaleVariance: 0.1
   useCount: 1
-  harvestCount: {x: 1, y: 3}
-  returnSeedCount: {x: 0, y: 1}
+  harvestAmount: {x: 1, y: 3}
+  returnSeedAmount: {x: 0, y: 1}
   harvestItemData: {fileID: 11400000, guid: 279aca3e99b8104489c17ed7a4ea9267, type: 2}
   plantPrefab: {fileID: 0}

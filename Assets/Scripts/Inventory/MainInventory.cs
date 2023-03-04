@@ -69,8 +69,7 @@ public class MainInventory : Singleton<MainInventory>
 				InventoryItem inventoryItem = inventoryItemObject.GetComponent<InventoryItem>();
 				inventoryItem.Item = new Item(item, addCount);
 				inventoryItem.InitializeCell(inventoryCell);
-				Debug.Log("add item: " + item.name + " at index: " + index + " with stack size: " + addCount + " where the inventory cell's index is " + inventoryCell.Index);
-				// WARNING: this line gives errors sometimes when I try to harvest a plant!
+				// Debug.Log("add item: " + item.name + " at index: " + index + " with stack size: " + addCount + " where the inventory cell's index is " + inventoryCell.Index);
 				inventoryCell.InventoryItem.UpdateStackSizeWithoutCall(addCount);
 				count -= addCount;
 				// Debug.Log("Added item: " + item.name + " at index: " + index + " with stack size: " + inventoryCell.InventoryItem.Item.stackSize);

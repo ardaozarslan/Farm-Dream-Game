@@ -13,7 +13,8 @@ public class BaseItemData : ScriptableObject
 	[Multiline]
 	public string description;
 	public Sprite sprite;
-	public int maxStackSize;
+	public int maxStackSize = 64;
+	public int maxDurability = 256;
 	private Item.StackType _stackType = Item.StackType.None;
 
 	public virtual Item.ItemType GetItemType() { return _itemType; }

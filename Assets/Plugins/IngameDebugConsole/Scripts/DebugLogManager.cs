@@ -533,10 +533,10 @@ namespace IngameDebugConsole
 			{
 				if( toggleWithKey )
 				{
-					if( isLogWindowVisible )
-						HideLogWindow();
-					else
-						ShowLogWindow();
+					// if( isLogWindowVisible )
+					// 	HideLogWindow();
+					// else
+					// 	ShowLogWindow();
 				}
 			};
 
@@ -680,10 +680,10 @@ namespace IngameDebugConsole
 			{
 				if( Input.GetKeyDown( toggleKey ) )
 				{
-					if( isLogWindowVisible )
-						HideLogWindow();
-					else
-						ShowLogWindow();
+					// if( isLogWindowVisible )
+					// 	HideLogWindow();
+					// else
+					// 	ShowLogWindow();
 				}
 			}
 #endif

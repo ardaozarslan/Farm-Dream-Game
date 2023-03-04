@@ -17,6 +17,7 @@ MonoBehaviour:
   description: Tomato seeds
   sprite: {fileID: 21300000, guid: 8f0ddaf3c8679e14f96378077616aee1, type: 3}
   maxStackSize: 64
+  maxDurability: 256
   itemType: 300
   stackType: 100
   growTime: 10
@@ -24,7 +25,7 @@ MonoBehaviour:
   growScale: 1.5
   growScaleVariance: 0.2
   useCount: 1
-  harvestCount: {x: 1, y: 3}
-  returnSeedCount: {x: 0, y: 1}
+  harvestAmount: {x: 1, y: 3}
+  returnSeedAmount: {x: 0, y: 1}
   harvestItemData: {fileID: 11400000, guid: cde96bbe900ebb044b7a3752984e04a2, type: 2}
   plantPrefab: {fileID: 5814941669311897096, guid: 1246aae5c65a27c4790782fab40f2424, type: 3}

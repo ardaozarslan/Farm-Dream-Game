@@ -17,4 +17,6 @@ MonoBehaviour:
   description: Rake tool
   sprite: {fileID: 21300000, guid: d17a739a03042df4eb0e64ed88657ab1, type: 3}
   maxStackSize: 1
+  maxDurability: 256
+  itemType: 100
   stackType: 200
